@@ -1,7 +1,6 @@
 using AutoMapper;
 using Givt.Domain.Entities;
 using Givt.Domain.Enums;
-using Givt.Domain.Interfaces;
 using Givt.Domain.Mappings;
 using Givt.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +9,12 @@ namespace Givt.Persistance.Test
 {
     public class DonationTests
     {
-        private DbContextOptions<GivtDbContext> dbContextOptions =
+        private readonly DbContextOptions<GivtDbContext> dbContextOptions =
             new DbContextOptionsBuilder<GivtDbContext>()
-            .UseInMemoryDatabase(databaseName: "givt_platform")
+            .UseInMemoryDatabase(databaseName: "givt_platform_test")
             .Options;
-        private IMapper mapper =
+
+        private readonly IMapper mapper =
             new MapperConfiguration(mc =>
             {
                 mc.AddProfiles(new List<Profile>
@@ -30,7 +30,7 @@ namespace Givt.Persistance.Test
         }
 
         [Test]
-        public async Task TestHistoryMaintained()
+        public async Task DonationHistory_Maintained()
         {
             var now = DateTime.UtcNow;
             var donationId = Guid.Empty;
@@ -40,15 +40,15 @@ namespace Givt.Persistance.Test
             {
                 var donation = new Donation
                 {
-                    //Medium =
-                    //Donor =
-                    //Recipient =
-                    //Campaign =
+                    //MediumId =
+                    //DonorId =
+                    //RecipientId =
+                    //CampaignId =
                     Currency = "EUR",
                     Amount = 1000,
                     DonationDateTime = now
                     //TransactionReference =
-                    //Payin =
+                    //PayinId =
                     //Last4 =
                     //Fingerprint
                 };

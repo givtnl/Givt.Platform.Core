@@ -3,7 +3,7 @@
   <Class Name="Givt.Domain.Entities.User">
     <Position X="8.75" Y="16.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <HashCode>AAAIAAAAACAAAAIAAAAAAAQAAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>Entities\User.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -427,11 +427,11 @@
     <ShowAsCollectionAssociation>
       <Property Name="FeeAgreements" />
       <Property Name="PayOutMethods" />
+      <Property Name="PayOuts" />
       <Property Name="Members" />
       <Property Name="Campaigns" />
       <Property Name="Timeslots" />
       <Property Name="Mediums" />
-      <Property Name="PayOuts" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Givt.Domain.Entities.Authorisation">
@@ -470,11 +470,44 @@
       <Property Name="Recipient" />
     </ShowAsAssociation>
   </Class>
+  <Class Name="Givt.Domain.Entities.DonationHistory">
+    <Position X="16.75" Y="0.75" Width="1.75" />
+    <Members>
+      <Property Name="Campaign" Hidden="true" />
+      <Property Name="Donor" Hidden="true" />
+      <Property Name="Medium" Hidden="true" />
+      <Property Name="Payin" Hidden="true" />
+      <Property Name="Recipient" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAQACQAgEBAAAAECACACAEAIACAAAAAAAEEAAA=</HashCode>
+      <FileName>Entities\DonationHistory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Givt.Domain.Entities.History&lt;Tid&gt;">
+    <Position X="19.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\History.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Reason" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
   <Enum Name="Givt.Domain.Enums.DeviceOS">
     <Position X="0.75" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Enums\DeviceOS.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Givt.Domain.Enums.LogReason">
+    <Position X="19.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAQAQAAAAAAAAAA=</HashCode>
+      <FileName>Enums\LogReason.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />
