@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{2B149C9C-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Persistance.Test", "src\Test\Givt.Persistance.Test\Givt.Persistance.Test.csproj", "{F72C40AF-60A0-4BBC-BDF4-2808374CB4D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.API.UnitTest", "src\Test\Givt.Api.UnitTest\Givt.API.UnitTest.csproj", "{41F2CD2A-F1CD-4A93-930C-C812631396BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.API.UnitTest", "src\Test\Givt.API.UnitTest\Givt.API.UnitTest.csproj", "{41F2CD2A-F1CD-4A93-930C-C812631396BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.API.ComponentTest", "src\Test\Givt.API.ComponentTest\Givt.API.ComponentTest.csproj", "{CB4E873F-1237-4988-9C6E-C745BBE236EB}"
 EndProject
