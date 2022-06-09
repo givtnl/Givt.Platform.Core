@@ -29,6 +29,7 @@ public class GivtDbContext : DbContext
     public DbSet<Fee> Fees { get; set; }
     public DbSet<FeeAgreement> FeeAgreements { get; set; }
     public DbSet<Donation> Donations { get; set; }
+    public DbSet<DonationHistory> DonationHistory { get; set; }
     public DbSet<CreditCard> CreditCards { get; set; }
     public DbSet<PayIn> PayIns { get; set; }
     public DbSet<PayOut> PayOuts { get; set; }
@@ -43,8 +44,7 @@ public class GivtDbContext : DbContext
     /// <summary>
     /// Automatically update the IAuditBasic properties and process ILoggedEntity without any developer action
     /// </summary>
-    public override int SaveChanges() =>
-        DoSaveChanges(() => base.SaveChanges());
+    // public override int SaveChanges() // calls SaveChanges(bool acceptAllChangesOnSuccess) in base class
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess) =>
         DoSaveChanges(() => base.SaveChanges(acceptAllChangesOnSuccess));
