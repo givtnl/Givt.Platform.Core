@@ -30,7 +30,7 @@ namespace Givt.Persistance.Test
         }
 
         [Test]
-        public void TestHistoryMaintained()
+        public async Task TestHistoryMaintained()
         {
             var now = DateTime.UtcNow;
             var donationId = Guid.Empty;
@@ -53,7 +53,7 @@ namespace Givt.Persistance.Test
                     //Fingerprint
                 };
                 context.Add(donation);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 var timeNeededForSave = DateTime.UtcNow - now;
                 Assert.Multiple(() =>
                 {
@@ -77,7 +77,7 @@ namespace Givt.Persistance.Test
                 donation.TransactionReference = "{642743C9-2AED-4D73-BF2F-11038A1320ED}";
                 donation.Last4= "0123";
                 donation.Fingerprint = "012345678901234567890123456789";
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 var historyList = GetHistoryList(context, donationId);
                 Assert.That(historyList, Has.Count.EqualTo(2));
                 var logged = historyList.Last();
@@ -90,7 +90,7 @@ namespace Givt.Persistance.Test
             {
                 var donation = context.Donations.Where(d => d.Id == donationId).First();
                 context.Remove(donation);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 var historyList = GetHistoryList(context, donationId);
                 Assert.That(historyList, Has.Count.EqualTo(3));
                 var logged = historyList.Last();
@@ -102,7 +102,7 @@ namespace Givt.Persistance.Test
             {
                 var historyList = GetHistoryList(context, donationId);
                 context.RemoveRange(historyList);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 historyList = GetHistoryList(context, donationId);
                 Assert.That(historyList, Has.Count.EqualTo(0));
             }

@@ -49,8 +49,7 @@ public class GivtDbContext : DbContext
     public override int SaveChanges(bool acceptAllChangesOnSuccess) =>
         DoSaveChanges(() => base.SaveChanges(acceptAllChangesOnSuccess));
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        await DoSaveChangesAsync(() => base.SaveChangesAsync(cancellationToken));
+    // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)  // calls SaveChanges(bool acceptAllChangesOnSuccess) in base class
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default) =>
         await DoSaveChangesAsync(() => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken));
