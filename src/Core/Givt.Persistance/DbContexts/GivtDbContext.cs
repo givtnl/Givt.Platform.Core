@@ -41,32 +41,21 @@ public class GivtDbContext : DbContext
         builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 
-    /// <summary>
-    /// Automatically update the IAuditBasic properties and process ILoggedEntity without any developer action
-    /// </summary>
-    // public override int SaveChanges() // calls SaveChanges(bool acceptAllChangesOnSuccess) in base class
-
-    public override int SaveChanges(bool acceptAllChangesOnSuccess) =>
-        DoSaveChanges(() => base.SaveChanges(acceptAllChangesOnSuccess));
-
-    // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)  // calls SaveChanges(bool acceptAllChangesOnSuccess) in base class
-
-    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default) =>
-        await DoSaveChangesAsync(() => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken));
-
     #region Auditing and logging
-    /* This is done in 3 phases:
+
+    /* Automatically update the IAuditBasic properties and process ILoggedEntity without any developer action.
+     * This is done in 3 phases:
      * 1: SetAuditData: update Created/Modified time stamps
      * 2: GetLoggedEntities:
-     *  a) Scan the changed entities, update dates, and create log entries (IHistory). Safeguard the properties of those entities 
-     *     on the verge of deletion (after base.SaveXxxx() they will be lost).
-     *  b) base.SaveXxx(). After the write, this will fetch the new ID, (new) ConcurrencyToken etc. from the database.
+     *  a) Scan the changed entities, update dates, and create log entries(IHistory). Safeguard the properties of those entities 
+     *     on the verge of deletion(after base.SaveXxxx() they will be lost).
+     *  b) base.SaveXxx(). After the write, this will fetch the new ID, (new) ConcurrencyToken etc.from the database.
      * 3: WriteLoggedEntities
-     *  a) Scan the changed entities again, and get the properties of Created or Updated entities (including changed IDs etc.)
+     * a) Scan the changed entities again, and get the properties of Created or Updated entities(including changed IDs etc.)
      *  b) base.SaveXxx(). This now only stores the history log.
      */
-    private delegate int IntAction();
-    private int DoSaveChanges(IntAction action)
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         var now = DateTime.UtcNow;
         // set last modified info etc.
@@ -74,20 +63,21 @@ public class GivtDbContext : DbContext
         // check for changes in ILoggedEntity entries.
         var historyList = GetLoggedEntities(now);
         // store what we can
-        var count = action();
+        var count = base.SaveChanges(acceptAllChangesOnSuccess);
         // is there more to write?
         if (historyList?.Count > 0)
         {
             // Store history linked with new ID's etc
             WriteLoggedEntities(historyList);
             // save the history data
-            count += action();
+            count += base.SaveChanges(acceptAllChangesOnSuccess);
         }
         return count;
     }
 
-    private delegate Task<int> IntActionAsync();
-    private async Task<int> DoSaveChangesAsync(IntActionAsync action)
+    // public override int SaveChanges() // calls other SaveChanges in base class
+
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         var now = DateTime.UtcNow;
         // set last modified info etc.
@@ -95,20 +85,18 @@ public class GivtDbContext : DbContext
         // check for changes in ILoggedEntity entries.
         var historyList = GetLoggedEntities(now);
         // store what we can
-        var t = action();
-        var count = await t;
+        var count = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         // is there more to write?
         if (historyList?.Count > 0)
         {
             // Store history linked with new ID's etc
             WriteLoggedEntities(historyList);
-            // save the history data
-            t = action();
-            count += await t;
+            // save the history data            
+            count += await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
         return count;
     }
-
+    // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) // calls other SaveChangesAsync in base class
 
     private void SetAuditData(DateTime now)
     {

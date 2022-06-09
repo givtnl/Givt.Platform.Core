@@ -13,12 +13,45 @@ public class DonationHistoryConfiguration : IEntityTypeConfiguration<DonationHis
             .HasKey(e => new { e.Id, e.Modified });
 
         builder
+            .Property(e => e.MediumId)
+            .HasColumnType(Consts.GUID_COLUMN_TYPE);
+
+        builder
+            .Ignore(e => e.Medium);
+
+        builder
+            .Property(e => e.DonorId)
+            .HasColumnType(Consts.GUID_COLUMN_TYPE);
+
+        builder
+            .Ignore(e => e.Donor);
+
+        builder.Property(e => e.RecipientId)
+            .HasColumnType(Consts.GUID_COLUMN_TYPE);
+
+        builder
+            .Ignore(e => e.Recipient);
+
+        builder
+            .Property(e => e.CampaignId)
+            .HasColumnType(Consts.GUID_COLUMN_TYPE);
+
+        builder
+            .Ignore(e => e.Campaign);
+
+        builder
             .Property(e => e.Currency)
             .HasMaxLength(3);
 
         builder
             .Property(e => e.TransactionReference)
             .HasMaxLength(50); // Stripe seems to use 27 characters
+
+        builder
+            .Property(e => e.PayinId)
+            .HasColumnType(Consts.GUID_COLUMN_TYPE);
+
+        builder.Ignore(e => e.Payin);
 
         builder
             .Property(e => e.Last4)

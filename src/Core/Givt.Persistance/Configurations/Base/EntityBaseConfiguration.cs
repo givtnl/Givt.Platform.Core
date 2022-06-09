@@ -1,4 +1,5 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,7 +14,7 @@ namespace Givt.Persistance.Configurations.Base
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()
                 .HasDefaultValueSql("(UUID())")
-                .HasColumnType("BINARY(16)")
+                .HasColumnType(Consts.GUID_COLUMN_TYPE)
                 .IsRequired();
         }
     }
