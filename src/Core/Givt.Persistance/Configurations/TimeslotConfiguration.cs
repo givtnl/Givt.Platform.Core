@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class TimeslotConfiguration : EntityBaseConfiguration<Timeslot>
+public class TimeslotConfiguration : EntityBaseInt64Configuration<Timeslot>
 {
     public override void Configure(EntityTypeBuilder<Timeslot> builder)
     {

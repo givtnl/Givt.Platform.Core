@@ -4,6 +4,7 @@ using Givt.Persistance.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,23 +18,25 @@ namespace Givt.Persistance.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Givt.Domain.Entities.AppVersion", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<int>("BuildNumber")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsCritical")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("OperatingSystem")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -42,23 +45,23 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Authorisation", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
 
-                    b.Property<Guid>("ResourceId")
-                        .HasColumnType("char(36)");
+                    b.Property<long>("ResourceId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("DonorOwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long?>("DonorOwnerId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("RecipientOwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long?>("RecipientOwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Role")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("UserEmailNormalised")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("UserId", "ResourceId");
 
@@ -73,36 +76,33 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Campaign", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<string>("Amounts")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<byte[]>("DefaultFeeId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("DefaultFeeId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Namespace")
                         .HasMaxLength(33)
-                        .HasColumnType("varchar(33)");
+                        .HasColumnType("character varying(33)");
 
-                    b.Property<byte[]>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("PayOutMethodId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PayOutMethodId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -117,24 +117,24 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.CampaignTexts", b =>
                 {
-                    b.Property<byte[]>("CampaignId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("LanguageId")
                         .HasMaxLength(18)
-                        .HasColumnType("varchar(18)");
+                        .HasColumnType("character varying(18)");
 
                     b.Property<string>("Goal")
                         .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("character varying(400)");
 
                     b.Property<string>("ThankYou")
                         .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("character varying(400)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(175)
-                        .HasColumnType("varchar(175)");
+                        .HasColumnType("character varying(175)");
 
                     b.HasKey("CampaignId", "LanguageId");
 
@@ -145,18 +145,17 @@ namespace Givt.Persistance.Migrations
                 {
                     b.Property<string>("Code")
                         .HasMaxLength(2)
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("character varying(2)");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
-                    b.Property<byte[]>("GivtOfficeId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("GivtOfficeId")
+                        .HasColumnType("bigint");
 
                     b.Property<ulong?>("PaymentMethods")
-                        .HasColumnType("BIGINT UNSIGNED");
+                        .HasColumnType("numeric(20,0)");
 
                     b.HasKey("Code");
 
@@ -167,63 +166,53 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Donation", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
-
-                    b.Property<DateTime>("ConcurrencyToken")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime(6)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<DateTime>("DonationDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("DonorId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("DonorId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Fingerprint")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Last4")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
-                    b.Property<byte[]>("MediumId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("MediumId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Modified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("PayinId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PayinId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("RecipientId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TransactionReference")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -244,56 +233,51 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.DonationHistory", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Modified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<DateTime>("DonationDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("DonorId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("DonorId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Fingerprint")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Last4")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("character varying(20)");
 
-                    b.Property<byte[]>("MediumId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("MediumId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("PayinId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PayinId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Reason")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<byte[]>("RecipientId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TransactionReference")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id", "Modified");
 
@@ -304,20 +288,19 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Donor", b =>
                 {
-                    b.Property<byte[]>("OwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Language")
                         .HasMaxLength(18)
-                        .HasColumnType("varchar(18)");
+                        .HasColumnType("character varying(18)");
 
-                    b.Property<byte[]>("PrimaryPayInMethodId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PrimaryPayInMethodId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("TimeZoneId")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasColumnType("character varying(15)");
 
                     b.HasKey("OwnerId");
 
@@ -328,24 +311,24 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Fee", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("Percentage")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -354,41 +337,38 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.FeeAgreement", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<int>("Discount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("EndDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("FeeId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("FeeId")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("MinVolumeAmount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("MinVolumeCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<byte[]>("RecipientId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -403,62 +383,65 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.LegalEntity", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<string>("Address")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("ConcurrencyToken")
-                        .HasColumnType("datetime(6)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now() ON UPDATE now()");
 
                     b.Property<string>("CountryId")
                         .HasMaxLength(2)
-                        .HasColumnType("varchar(2)");
+                        .HasColumnType("character varying(2)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("EmailAddress")
                         .HasMaxLength(175)
-                        .HasColumnType("varchar(175)");
+                        .HasColumnType("character varying(175)");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("Modified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(175)
-                        .HasColumnType("varchar(175)");
+                        .HasColumnType("character varying(175)");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Preposition")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Url")
                         .HasMaxLength(175)
-                        .HasColumnType("varchar(175)");
+                        .HasColumnType("character varying(175)");
 
                     b.HasKey("Id");
 
@@ -469,25 +452,23 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Medium", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Class")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MediumId")
                         .HasMaxLength(33)
-                        .HasColumnType("varchar(33)");
+                        .HasColumnType("character varying(33)");
 
-                    b.Property<byte[]>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -502,33 +483,32 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.PayIn", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
-                    b.Property<byte[]>("DonorOwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long?>("DonorOwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("ExecutedDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("PayInMethodId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PayInMethodId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("PaymentProviderExecutionDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TotalPaid")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -541,25 +521,24 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.PayInMethod", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<int>("Class")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<byte[]>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PSP_Identification")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PSP_Owner")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -572,85 +551,84 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.PayOut", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("character varying(3)");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("ExecutedDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("GivtServiceFee")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("GivtServiceFeeTaxes")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("MandateCost")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("MandateCostCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("MandateTaxes")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("PaymentCost")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("PaymentCostTaxes")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<DateTime?>("PaymentProviderExecutionDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PaymentProviderId")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<decimal>("RTransactionAmount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("RTransactionT1Cost")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("RTransactionT1Count")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("RTransactionT2Cost")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("RTransactionT2Count")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("RTransactionTaxes")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
-                    b.Property<byte[]>("RecipientOwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long?>("RecipientOwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("TotalPaid")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("TransactionCost")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("TransactionCount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("TransactionTaxes")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -663,22 +641,21 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.PayOutMethod", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
                     b.Property<string>("PSP_Identification")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PSP_Owner")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
-                    b.Property<byte[]>("RecipientId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -689,24 +666,22 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Recipient", b =>
                 {
-                    b.Property<byte[]>("OwnerId")
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("DefaultCampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("DefaultCampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("DisplayName")
                         .HasMaxLength(175)
-                        .HasColumnType("varchar(175)");
+                        .HasColumnType("character varying(175)");
 
                     b.Property<string>("LogoImageLink")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
-                    b.Property<byte[]>("PrimaryPayOutMethodId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("PrimaryPayOutMethodId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("OwnerId");
 
@@ -719,28 +694,25 @@ namespace Givt.Persistance.Migrations
 
             modelBuilder.Entity("Givt.Domain.Entities.Timeslot", b =>
                 {
-                    b.Property<byte[]>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("BINARY(16)")
-                        .HasDefaultValueSql("(UUID())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("unique_rowid()");
 
-                    b.Property<byte[]>("CampaignId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("CampaignId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("EndDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("MediumId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("MediumId")
+                        .HasColumnType("bigint");
 
-                    b.Property<byte[]>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("BINARY(16)");
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -757,18 +729,18 @@ namespace Givt.Persistance.Migrations
                 {
                     b.Property<string>("EmailNormalised")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("OS")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("EmailNormalised");
 
@@ -781,11 +753,11 @@ namespace Givt.Persistance.Migrations
 
                     b.Property<string>("Fingerprint")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Last4")
                         .HasMaxLength(4)
-                        .HasColumnType("varchar(4)");
+                        .HasColumnType("character varying(4)");
 
                     b.HasDiscriminator().HasValue(1);
                 });
@@ -795,17 +767,17 @@ namespace Givt.Persistance.Migrations
                     b.HasBaseType("Givt.Domain.Entities.Medium");
 
                     b.Property<float>("Lat")
-                        .HasColumnType("float");
+                        .HasColumnType("real");
 
                     b.Property<float>("Lon")
-                        .HasColumnType("float");
+                        .HasColumnType("real");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("Radius")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue(2);
                 });

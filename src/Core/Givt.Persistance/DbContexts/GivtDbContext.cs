@@ -3,6 +3,7 @@ using Givt.Domain.Entities;
 using Givt.Domain.Enums;
 using Givt.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Givt.Persistance.DbContexts;
 
@@ -34,7 +35,12 @@ public class GivtDbContext : DbContext
     public DbSet<PayIn> PayIns { get; set; }
     public DbSet<PayOut> PayOuts { get; set; }
 
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        // support the generation of ON UPDATE SQL on columns
+        optionsBuilder.ReplaceService<IMigrationsSqlGenerator, CockroachMigrationsSqlGenerator>();
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         //base.OnModelCreating(builder);

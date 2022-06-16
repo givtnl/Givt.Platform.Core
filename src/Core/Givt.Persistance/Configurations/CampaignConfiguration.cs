@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class CampaignConfiguration : EntityBaseConfiguration<Campaign>
+public class CampaignConfiguration : EntityBaseInt64Configuration<Campaign>
 {
     public override void Configure(EntityTypeBuilder<Campaign> builder)
     {

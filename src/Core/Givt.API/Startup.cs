@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Pomelo.EntityFrameworkCore.MySql;
+//using Pomelo.EntityFrameworkCore.MySql;
 using Serilog.Sinks.Http.Logger;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
@@ -117,12 +117,17 @@ public class Startup
         var connectionString = Configuration.GetConnectionString("GivtPlatformDb");
         services.AddDbContext<GivtDbContext>(
             options => options
-                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-                // The following three options help with debugging, but should
-                // be changed or removed for production.
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
+            // MySQL/MariaDB:
+            //.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            // PostgreSQL / CockroachDB
+            .UseNpgsql(connectionString)
+#if DEBUG
+            // The following three options help with debugging, but should
+            // be changed or removed for production.
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
+#endif
         );
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

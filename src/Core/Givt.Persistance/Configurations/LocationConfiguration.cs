@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class LocationConfiguration : EntityBaseConfiguration<Location>
+public class LocationConfiguration : EntityBaseInt64Configuration<Location>
 {
     public override void Configure(EntityTypeBuilder<Location> builder)
     {

@@ -2,17 +2,17 @@
 
 namespace Givt.Domain.Entities;
 
-public class Medium : EntityBase<Guid>
+public class Medium : EntityBase<Int64>
 {
     /// <summary>
     /// Namespace + instance
     /// </summary>
     public string MediumId { get; set; }
-    public Guid OwnerId { get; set; }
+    public Int64 OwnerId { get; set; }
     public Recipient Owner { get; set; }
 
 
-    public Guid CampaignId { get; set; }
+    public Int64 CampaignId { get; set; }
     /// <summary>
     /// The Campaign this medium <b>always</b> relates to. If there is flexibility e.g. through Timeslot(s), this is not set.
     /// </summary> 

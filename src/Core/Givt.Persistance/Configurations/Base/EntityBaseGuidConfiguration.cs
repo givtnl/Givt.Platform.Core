@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations.Base
 {
-    public class EntityBaseConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
+    public class EntityBaseGuidConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
         where TEntity : EntityBase<Guid>
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
@@ -13,8 +13,11 @@ namespace Givt.Persistance.Configurations.Base
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()
-                .HasDefaultValueSql("(UUID())")
-                .HasColumnType(Consts.GUID_COLUMN_TYPE)
+            // MariaDB:
+            //    .HasDefaultValueSql("(UUID())")
+            //    .HasColumnType(Consts.GUID_COLUMN_TYPE)
+            // CockroachDB
+                .HasDefaultValueSql("(gen_random_uuid())")
                 .IsRequired();
         }
     }

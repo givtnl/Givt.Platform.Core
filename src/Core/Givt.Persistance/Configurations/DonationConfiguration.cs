@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class DonationConfiguration : OptimisticLockConfiguration<Donation>
+public class DonationConfiguration : EntityBaseInt64Configuration<Donation>
 {
     public override void Configure(EntityTypeBuilder<Donation> builder)
     {

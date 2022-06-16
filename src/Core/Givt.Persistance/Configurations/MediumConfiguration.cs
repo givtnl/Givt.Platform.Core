@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class MediumConfiguration : EntityBaseConfiguration<Medium>
+public class MediumConfiguration : EntityBaseInt64Configuration<Medium>
 {
     public override void Configure(EntityTypeBuilder<Medium> builder)
     {

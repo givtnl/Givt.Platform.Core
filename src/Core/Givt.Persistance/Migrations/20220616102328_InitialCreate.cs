@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -10,71 +9,83 @@ namespace Givt.Persistance.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "AppVersion",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    BuildNumber = table.Column<int>(type: "int", nullable: false),
-                    OperatingSystem = table.Column<int>(type: "int", nullable: false),
-                    IsCritical = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    BuildNumber = table.Column<int>(type: "integer", nullable: false),
+                    OperatingSystem = table.Column<int>(type: "integer", nullable: false),
+                    IsCritical = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppVersion", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DonationHistory",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MediumId = table.Column<long>(type: "bigint", nullable: false),
+                    DonorId = table.Column<long>(type: "bigint", nullable: false),
+                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    DonationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TransactionReference = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PayinId = table.Column<long>(type: "bigint", nullable: false),
+                    Last4 = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Fingerprint = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Reason = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonationHistory", x => new { x.Id, x.Modified });
+                });
 
             migrationBuilder.CreateTable(
                 name: "Fees",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    Percentage = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    Percentage = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fees", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    EmailNormalised = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OS = table.Column<int>(type: "int", nullable: false)
+                    EmailNormalised = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    OS = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.EmailNormalised);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Authorisations",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    ResourceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserEmailNormalised = table.Column<string>(type: "varchar(200)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipientOwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: true),
-                    DonorOwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: true),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ResourceId = table.Column<long>(type: "bigint", nullable: false),
+                    UserEmailNormalised = table.Column<string>(type: "character varying(200)", nullable: true),
+                    RecipientOwnerId = table.Column<long>(type: "bigint", nullable: true),
+                    DonorOwnerId = table.Column<long>(type: "bigint", nullable: true),
+                    Role = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,23 +95,20 @@ namespace Givt.Persistance.Migrations
                         column: x => x.UserEmailNormalised,
                         principalTable: "Users",
                         principalColumn: "EmailNormalised");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Campaigns",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Namespace = table.Column<string>(type: "varchar(33)", maxLength: 33, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Amounts = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    DefaultFeeId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    PayOutMethodId = table.Column<byte[]>(type: "BINARY(16)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    Namespace = table.Column<string>(type: "character varying(33)", maxLength: 33, nullable: true),
+                    Amounts = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DefaultFeeId = table.Column<long>(type: "bigint", nullable: false),
+                    PayOutMethodId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,22 +119,17 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Fees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "CampaignTexts",
                 columns: table => new
                 {
-                    LanguageId = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Title = table.Column<string>(type: "varchar(175)", maxLength: 175, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Goal = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ThankYou = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    LanguageId = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: false),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    Title = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
+                    Goal = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
+                    ThankYou = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,55 +140,41 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Campaigns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
-                    Code = table.Column<string>(type: "varchar(2)", maxLength: 2, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    GivtOfficeId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    PaymentMethods = table.Column<ulong>(type: "BIGINT UNSIGNED", nullable: true)
+                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    GivtOfficeId = table.Column<long>(type: "bigint", nullable: false),
+                    PaymentMethods = table.Column<ulong>(type: "numeric(20,0)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Code);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "LegalEntities",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Preposition = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PostalCode = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CountryId = table.Column<string>(type: "varchar(2)", maxLength: 2, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(175)", maxLength: 175, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EmailAddress = table.Column<string>(type: "varchar(175)", maxLength: 175, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Url = table.Column<string>(type: "varchar(175)", maxLength: 175, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyToken = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Modified = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Preposition = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    PostalCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    City = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CountryId = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
+                    EmailAddress = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
+                    Url = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConcurrencyToken = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now() ON UPDATE now()")
                 },
                 constraints: table =>
                 {
@@ -195,33 +184,26 @@ namespace Givt.Persistance.Migrations
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Code");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Donations",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    MediumId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    DonorId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    RecipientId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    DonationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    TransactionReference = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PayinId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Last4 = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Fingerprint = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyToken = table.Column<DateTime>(type: "datetime(6)", rowVersion: true, nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Modified = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    MediumId = table.Column<long>(type: "bigint", nullable: false),
+                    DonorId = table.Column<long>(type: "bigint", nullable: false),
+                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    DonationDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TransactionReference = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PayinId = table.Column<long>(type: "bigint", nullable: false),
+                    Last4 = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Fingerprint = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,19 +214,16 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Campaigns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Donors",
                 columns: table => new
                 {
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    PrimaryPayInMethodId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Language = table.Column<string>(type: "varchar(18)", maxLength: 18, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TimeZoneId = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    PrimaryPayInMethodId = table.Column<long>(type: "bigint", nullable: false),
+                    Language = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: true),
+                    TimeZoneId = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,24 +234,19 @@ namespace Givt.Persistance.Migrations
                         principalTable: "LegalEntities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PayInMethod",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    PSP_Owner = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PSP_Identification = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Class = table.Column<int>(type: "int", nullable: false),
-                    Last4 = table.Column<string>(type: "varchar(4)", maxLength: 4, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Fingerprint = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    PSP_Owner = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PSP_Identification = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Class = table.Column<int>(type: "integer", nullable: false),
+                    Last4 = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: true),
+                    Fingerprint = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -283,22 +257,20 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Donors",
                         principalColumn: "OwnerId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PayIns",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ExecutedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PaymentProviderExecutionDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PayInMethodId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    TotalPaid = table.Column<int>(type: "int", nullable: false),
-                    DonorOwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: true)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExecutedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PaymentProviderExecutionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    PayInMethodId = table.Column<long>(type: "bigint", nullable: false),
+                    TotalPaid = table.Column<int>(type: "integer", nullable: false),
+                    DonorOwnerId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -313,24 +285,22 @@ namespace Givt.Persistance.Migrations
                         column: x => x.PayInMethodId,
                         principalTable: "PayInMethod",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "FeeAgreements",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    RecipientId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    FeeId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    MinVolumeCount = table.Column<int>(type: "int", nullable: true),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MinVolumeAmount = table.Column<int>(type: "int", nullable: true),
-                    Discount = table.Column<int>(type: "int", nullable: false),
-                    StartDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
+                    FeeId = table.Column<long>(type: "bigint", nullable: false),
+                    MinVolumeCount = table.Column<int>(type: "integer", nullable: true),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    MinVolumeAmount = table.Column<int>(type: "integer", nullable: true),
+                    Discount = table.Column<int>(type: "integer", nullable: false),
+                    StartDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -347,24 +317,21 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Fees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Mediums",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    MediumId = table.Column<string>(type: "varchar(33)", maxLength: 33, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    Class = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Lat = table.Column<float>(type: "float", nullable: true),
-                    Lon = table.Column<float>(type: "float", nullable: true),
-                    Radius = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    MediumId = table.Column<string>(type: "character varying(33)", maxLength: 33, nullable: true),
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    Class = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Lat = table.Column<float>(type: "real", nullable: true),
+                    Lon = table.Column<float>(type: "real", nullable: true),
+                    Radius = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -375,37 +342,31 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Campaigns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PayOutMethod",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    RecipientId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    PSP_Owner = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PSP_Identification = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    RecipientId = table.Column<long>(type: "bigint", nullable: false),
+                    PSP_Owner = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PSP_Identification = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PayOutMethod", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Recipients",
                 columns: table => new
                 {
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    DisplayName = table.Column<string>(type: "varchar(175)", maxLength: 175, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LogoImageLink = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PrimaryPayOutMethodId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    DefaultCampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false)
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    DisplayName = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
+                    LogoImageLink = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    PrimaryPayOutMethodId = table.Column<long>(type: "bigint", nullable: false),
+                    DefaultCampaignId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -428,40 +389,37 @@ namespace Givt.Persistance.Migrations
                         principalTable: "PayOutMethod",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PayOuts",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ExecutedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PaymentProviderExecutionDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Currency = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TransactionCount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    TransactionCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    TransactionTaxes = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    MandateCostCount = table.Column<int>(type: "int", nullable: false),
-                    MandateCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    MandateTaxes = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionT1Count = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionT1Cost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionT2Count = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionT2Cost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RTransactionTaxes = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    GivtServiceFee = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    GivtServiceFeeTaxes = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    PaymentCost = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    PaymentCostTaxes = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    TotalPaid = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    PaymentProviderId = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    RecipientOwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: true)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExecutedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PaymentProviderExecutionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
+                    TransactionCount = table.Column<decimal>(type: "numeric", nullable: false),
+                    TransactionCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    TransactionTaxes = table.Column<decimal>(type: "numeric", nullable: false),
+                    MandateCostCount = table.Column<int>(type: "integer", nullable: false),
+                    MandateCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    MandateTaxes = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionT1Count = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionT1Cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionT2Count = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionT2Cost = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    RTransactionTaxes = table.Column<decimal>(type: "numeric", nullable: false),
+                    GivtServiceFee = table.Column<decimal>(type: "numeric", nullable: false),
+                    GivtServiceFeeTaxes = table.Column<decimal>(type: "numeric", nullable: false),
+                    PaymentCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    PaymentCostTaxes = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalPaid = table.Column<decimal>(type: "numeric", nullable: false),
+                    PaymentProviderId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    RecipientOwnerId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -477,19 +435,18 @@ namespace Givt.Persistance.Migrations
                         column: x => x.RecipientOwnerId,
                         principalTable: "Recipients",
                         principalColumn: "OwnerId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Timeslots",
                 columns: table => new
                 {
-                    Id = table.Column<byte[]>(type: "BINARY(16)", nullable: false, defaultValueSql: "(UUID())"),
-                    OwnerId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    StartDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CampaignId = table.Column<byte[]>(type: "BINARY(16)", nullable: false),
-                    MediumId = table.Column<byte[]>(type: "BINARY(16)", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "unique_rowid()"),
+                    OwnerId = table.Column<long>(type: "bigint", nullable: false),
+                    StartDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CampaignId = table.Column<long>(type: "bigint", nullable: false),
+                    MediumId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -512,8 +469,7 @@ namespace Givt.Persistance.Migrations
                         principalTable: "Recipients",
                         principalColumn: "OwnerId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Authorisations_DonorOwnerId",
@@ -549,6 +505,11 @@ namespace Givt.Persistance.Migrations
                 name: "IX_Countries_GivtOfficeId",
                 table: "Countries",
                 column: "GivtOfficeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonationHistory_TransactionReference",
+                table: "DonationHistory",
+                column: "TransactionReference");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Donations_CampaignId",
@@ -796,6 +757,9 @@ namespace Givt.Persistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "CampaignTexts");
+
+            migrationBuilder.DropTable(
+                name: "DonationHistory");
 
             migrationBuilder.DropTable(
                 name: "Donations");

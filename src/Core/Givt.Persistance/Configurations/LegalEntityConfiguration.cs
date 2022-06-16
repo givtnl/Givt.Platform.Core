@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class LegalEntityConfiguration : EntityBaseConfiguration<LegalEntity>
+public class LegalEntityConfiguration : OptimisticLockConfiguration<LegalEntity>
 {
     public override void Configure(EntityTypeBuilder<LegalEntity> builder)
     {

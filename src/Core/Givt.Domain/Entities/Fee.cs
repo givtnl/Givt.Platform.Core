@@ -2,7 +2,7 @@
 
 namespace Givt.Domain.Entities;
 
-public class Fee : EntityBase<Guid>
+public class Fee : EntityBase<Int64>
 {
     public string Name { get; set; }
     public string Currency { get; set; }

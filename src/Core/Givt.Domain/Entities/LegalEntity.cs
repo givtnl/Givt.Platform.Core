@@ -3,7 +3,7 @@ using Givt.Domain.Enums;
 
 namespace Givt.Domain.Entities;
 
-public class LegalEntity : EntityLockAudit<Guid, DateTime>
+public class LegalEntity : EntityLockAudit<Int64, DateTime>
 {
     public LegalEntityType Type { get; set; }
     public string FirstName { get; set; }

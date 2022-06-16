@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistance.Configurations;
 
-public class FeeConfiguration : EntityBaseConfiguration<Fee>
+public class FeeConfiguration : EntityBaseInt64Configuration<Fee>
 {
     public override void Configure(EntityTypeBuilder<Fee> builder)
     {

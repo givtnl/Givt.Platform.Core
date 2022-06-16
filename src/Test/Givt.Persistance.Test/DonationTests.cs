@@ -33,7 +33,7 @@ namespace Givt.Persistance.Test
         public async Task DonationHistory_Maintained()
         {
             var now = DateTime.UtcNow;
-            var donationId = Guid.Empty;
+            var donationId = default(Int64);
 
             // save donation
             using (var context = new GivtDbContext(dbContextOptions, mapper))
@@ -57,7 +57,7 @@ namespace Givt.Persistance.Test
                 var timeNeededForSave = DateTime.UtcNow - now;
                 Assert.Multiple(() =>
                 {
-                    Assert.That(donation.Id, Is.Not.EqualTo(Guid.Empty));
+                    Assert.That(donation.Id, Is.Not.EqualTo(0));
                     Assert.That(donation.Created, Is.EqualTo(DateTime.UtcNow).Within(timeNeededForSave));
                     Assert.That(donation.Modified, Is.EqualTo(DateTime.UtcNow).Within(timeNeededForSave));
                 });
@@ -127,7 +127,7 @@ namespace Givt.Persistance.Test
             });
         }
 
-        private static List<DonationHistory> GetHistoryList(GivtDbContext context, Guid donationId)
+        private static List<DonationHistory> GetHistoryList(GivtDbContext context, Int64 donationId)
         {
             return context.DonationHistory
                 .Where(d => d.Id == donationId)
