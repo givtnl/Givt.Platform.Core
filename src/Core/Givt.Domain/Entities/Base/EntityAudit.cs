@@ -1,4 +1,6 @@
-﻿namespace Givt.Domain.Entities.Base;
+﻿using Givt.Domain.Interfaces;
+
+namespace Givt.Domain.Entities.Base;
 
 public abstract class EntityAudit<TId> : EntityBase<TId>
 {
