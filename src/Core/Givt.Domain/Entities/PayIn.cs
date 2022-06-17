@@ -1,11 +1,12 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
 /// <summary>
 /// A transaction collecting a sum of donations from the donor
 /// </summary>
-public class PayIn : EntityBase<Int64>
+public class PayIn : EntityBase<Int64>, IEntity<Int64>
 {
     public DateTime EndDate { get; set; }
     public DateTime ExecutedDate { get; set; }

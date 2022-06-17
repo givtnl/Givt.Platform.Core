@@ -3,7 +3,7 @@ using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class Donation : EntityAudit<Int64>, IDonation, IAuditBasic, ILoggedEntity
+public class Donation : EntityAudit<Int64>, IDonation, IEntity<Int64>, IAuditBasic, ILoggedEntity
 {
     public Int64 MediumId { get; set; }
     public Medium Medium { get; set; }

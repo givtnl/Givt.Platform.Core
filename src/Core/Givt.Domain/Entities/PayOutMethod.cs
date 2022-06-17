@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class PayOutMethod : EntityBase<Int64>
+public class PayOutMethod : EntityBase<Int64>, IEntity<Int64>
 {
     public Int64 RecipientId { get; set; }    
     public Recipient Recipient { get; set; }

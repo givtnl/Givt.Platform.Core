@@ -1,9 +1,10 @@
 ﻿using Givt.Domain.Entities.Base;
 using Givt.Domain.Enums;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class LegalEntity : EntityLockAudit<Int64, DateTime>
+public class LegalEntity : EntityLockAudit<Int64, DateTime>, IEntity<Int64>, IAuditBasic, IOptimisticLock<DateTime>
 {
     public LegalEntityType Type { get; set; }
     public string FirstName { get; set; }

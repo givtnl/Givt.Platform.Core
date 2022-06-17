@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class PayOut : EntityBase<Int64>
+public class PayOut : EntityBase<Int64>, IEntity<Int64>
 {
     public DateTime EndDate { get; set; }
     public DateTime ExecutedDate { get; set; }

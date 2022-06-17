@@ -1,5 +1,4 @@
 ﻿using Givt.Domain.Entities.Base;
-using Givt.Persistence.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,10 +13,10 @@ namespace Givt.Persistence.Configurations.Base
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()
             // MariaDB:
-            //    .HasDefaultValueSql("(UUID())")
+            //    .HasDefaultValueSql("UUID()")
             //    .HasColumnType(Consts.GUID_COLUMN_TYPE)
             // CockroachDB
-                .HasDefaultValueSql("(gen_random_uuid())")
+                .HasDefaultValueSql("gen_random_uuid()")
                 .IsRequired();
         }
     }

@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class Medium : EntityBase<Int64>
+public class Medium : EntityBase<Int64>, IEntity<Int64>
 {
     /// <summary>
     /// Namespace + instance

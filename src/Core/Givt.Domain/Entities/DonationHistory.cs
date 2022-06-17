@@ -2,7 +2,7 @@
 
 namespace Givt.Domain.Entities;
 
-public class DonationHistory : History<Int64>, IDonation
+public class DonationHistory : History<Int64>, IHistory<Int64>, IDonation
 {
     public Int64 MediumId { get; set; }
     public Medium Medium { get; set; }

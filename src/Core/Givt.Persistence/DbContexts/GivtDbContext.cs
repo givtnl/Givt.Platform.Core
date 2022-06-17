@@ -81,7 +81,7 @@ public class GivtDbContext : DbContext
         return count;
     }
 
-    // public override int SaveChanges() // calls SaveChanges (above) in base class
+    // public override int SaveChanges() // calls SaveChanges (above) from base class
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
@@ -102,7 +102,7 @@ public class GivtDbContext : DbContext
         }
         return count;
     }
-    // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) // calls SaveChanges (above) in base class
+    // public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) // calls SaveChanges (above) from base class
 
     private void SetAuditData(DateTime now)
     {

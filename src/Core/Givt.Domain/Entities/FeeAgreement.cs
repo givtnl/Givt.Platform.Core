@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class FeeAgreement: EntityBase<Int64>
+public class FeeAgreement: EntityBase<Int64>, IEntity<Int64>
 {
     public Int64 CampaignId { get; set; }    
     public Campaign Campaign { get; set; }

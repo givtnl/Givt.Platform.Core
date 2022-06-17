@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class Campaign : EntityBase<Int64>
+public class Campaign : EntityBase<Int64>, IEntity<Int64>
 {
     public Int64 OwnerId { get; set; }
     public Recipient Owner { get; set; }
