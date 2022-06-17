@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Givt.Domain\Givt.Domain.csproj" />
-    <ProjectReference Include="..\Givt.Persistance\Givt.Persistance.csproj" />
+    <ProjectReference Include="..\Givt.Persistence\Givt.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

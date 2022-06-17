@@ -2,7 +2,7 @@
 
 namespace Givt.Domain.Entities.Base;
 
-public abstract class EntityLockAudit<TId, Ttoken> : EntityAudit<TId>, IOptimisticLock<Ttoken>
+public abstract class EntityLockAudit<TId, Ttoken> : EntityAudit<TId>
 {
     public Ttoken ConcurrencyToken { get; set; }
 }

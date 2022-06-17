@@ -7,7 +7,7 @@ using Givt.API.Options;
 using Givt.Domain.Mappings;
 using Givt.Infrastructure.Behaviors;
 using Givt.Infrastructure.Loggers;
-using Givt.Persistance.DbContexts;
+using Givt.Persistence.DbContexts;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
