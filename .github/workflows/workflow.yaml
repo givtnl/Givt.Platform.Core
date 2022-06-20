@@ -67,3 +67,4 @@ jobs:
           manifests: |
             deployment.yaml
           images: "${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}"
+          force: true
