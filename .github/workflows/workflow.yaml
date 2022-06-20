@@ -52,7 +52,9 @@ jobs:
           # Only push image when on main (production) and pre-main (development)
           ##push: ${{ GitHub.event_name != 'pull_request' }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.sha }}
 
       - name: Connect to k8s cluster
         uses: azure/k8s-set-context@v2
@@ -66,5 +68,4 @@ jobs:
           namespace: "givt-platform-staging"
           manifests: |
             deployment.yaml
-          images: "${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}"
-          force: true
+          images: "${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.sha }}"
