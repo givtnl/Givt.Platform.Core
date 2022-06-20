@@ -17,5 +17,6 @@ spec:
       containers:
       - name: platform-api
         image: givt/platform-api:development
+        force: true
         ports:
         - containerPort: 5000
