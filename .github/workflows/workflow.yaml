@@ -60,6 +60,10 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBERNETES_GITHUB_SERVICE_ACCOUNT }}
 
-      - name: Test k8s connection
-        run: |
-          kubectl get nodes
+      - name: Deploy in k8s
+        uses: Azure/k8s-deploy@v3.1
+        with:
+          namespace: "givt-platform-staging"
+          manifests: |
+            deployment.yaml
+          images: "platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}"
