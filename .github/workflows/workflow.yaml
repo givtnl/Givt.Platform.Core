@@ -11,13 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup dotnet v6
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.x'
       - name: Install dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --no-restore
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
+      - name: Connect to k8s cluster
+        uses: azure/k8s-set-context@v2
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBERNETES_GITHUB_SERVICE_ACCOUNT }}
+
+      - name: Test k8s connection
+        run: |
+          kubectl get nodes
