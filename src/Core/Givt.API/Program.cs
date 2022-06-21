@@ -34,6 +34,7 @@ namespace Givt.API
                         //})
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // I think we dont need this anymore right? Bcus AddAzureAppConfig() ?
                         .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                        .AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables();
                 })
                 .UseDefaultServiceProvider(x =>

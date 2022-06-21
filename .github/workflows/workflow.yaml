@@ -80,3 +80,4 @@ jobs:
           manifests: |
             deployment.yaml
           images: "${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.run_number }}.${{ github.run_attempt }}.${{ steps.vars.outputs.sha_short }}"
+
