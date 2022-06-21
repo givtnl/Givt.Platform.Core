@@ -47,8 +47,8 @@
     </AssociationLine>
     <AssociationLine Name="Timeslots" Type="Givt.Domain.Entities.Timeslot" FixedToPoint="true">
       <Path>
-        <Point X="3.438" Y="5.233" />
-        <Point X="3.438" Y="7.25" />
+        <Point X="3.938" Y="5.233" />
+        <Point X="3.938" Y="7.25" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -62,6 +62,7 @@
     <ShowAsCollectionAssociation>
       <Property Name="Timeslots" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.PayOut">
     <Position X="20.25" Y="9.5" Width="2.5" />
@@ -83,6 +84,7 @@
     <ShowAsAssociation>
       <Property Name="Campaign" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.Country">
     <Position X="11.25" Y="9.5" Width="1.75" />
@@ -119,18 +121,15 @@
         <Point X="4" Y="4.625" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="Timeslots" Type="Givt.Domain.Entities.Timeslot" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="Timeslots" Type="Givt.Domain.Entities.Timeslot" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.5" Y="5.813" />
-        <Point X="8.125" Y="5.813" />
-        <Point X="8.125" Y="7.428" />
-        <Point X="7.333" Y="7.428" Type="JumpStart" />
-        <Point X="7.079" Y="7.428" Type="JumpEnd" />
-        <Point X="6.583" Y="7.428" Type="JumpStart" />
-        <Point X="6.292" Y="7.428" Type="JumpEnd" />
-        <Point X="6.021" Y="7.428" Type="JumpStart" />
-        <Point X="5.729" Y="7.428" Type="JumpEnd" />
-        <Point X="4" Y="7.428" />
+        <Point X="8.5" Y="5.312" />
+        <Point X="6.583" Y="5.312" Type="JumpStart" />
+        <Point X="6.292" Y="5.312" Type="JumpEnd" />
+        <Point X="6.021" Y="5.312" Type="JumpStart" />
+        <Point X="5.729" Y="5.312" Type="JumpEnd" />
+        <Point X="4.25" Y="5.312" />
+        <Point X="4.25" Y="7.25" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="FeeAgreements" Type="Givt.Domain.Entities.FeeAgreement" FixedFromPoint="true" FixedToPoint="true">
@@ -155,6 +154,7 @@
       <Property Name="Texts" />
       <Property Name="FeeAgreements" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.Location">
     <Position X="0.5" Y="6.25" Width="1.5" />
@@ -164,7 +164,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Givt.Domain.Entities.Timeslot">
-    <Position X="2.5" Y="7.25" Width="1.5" />
+    <Position X="3" Y="7.25" Width="1.5" />
     <Members>
       <Property Name="CampaignId" Hidden="true" />
       <Property Name="MediumId" Hidden="true" />
@@ -172,15 +172,14 @@
     </Members>
     <AssociationLine Name="Owner" Type="Givt.Domain.Entities.Recipient" FixedFromPoint="true">
       <Path>
-        <Point X="4" Y="8.306" />
+        <Point X="4.5" Y="8.306" />
         <Point X="5.5" Y="8.306" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Campaign" Type="Givt.Domain.Entities.Campaign" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="4" Y="7.312" />
-        <Point X="4.375" Y="7.312" />
-        <Point X="4.375" Y="5.245" />
+        <Point X="4.125" Y="7.25" />
+        <Point X="4.125" Y="5.245" />
         <Point X="5.729" Y="5.245" Type="JumpStart" />
         <Point X="6.021" Y="5.245" Type="JumpEnd" />
         <Point X="6.292" Y="5.245" Type="JumpStart" />
@@ -203,6 +202,7 @@
       <Property Name="Campaign" />
       <Property Name="Medium" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.Donation">
     <Position X="14.25" Y="9.75" Width="2.25" />
@@ -252,6 +252,7 @@
     <ShowAsAssociation>
       <Property Name="Owner" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.LegalEntity">
     <Position X="8.5" Y="9.75" Width="1.5" />
@@ -265,6 +266,7 @@
     <ShowAsAssociation>
       <Property Name="Country" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.PayIn">
     <Position X="17.5" Y="9.5" Width="2.5" />
@@ -281,6 +283,7 @@
     <ShowAsCollectionAssociation>
       <Property Name="Donations" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.FeeAgreement">
     <Position X="6" Y="0.5" Width="1.75" />
@@ -311,6 +314,7 @@
       <Property Name="Recipient" />
       <Property Name="Fee" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.Fee">
     <Position X="9.25" Y="0.75" Width="1.5" />
@@ -318,6 +322,7 @@
       <HashCode>AAAAAAAAAAAAAAAAAAAAAASACAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Fee.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.AppVersion">
     <Position X="4" Y="12.25" Width="1.5" />
@@ -328,6 +333,7 @@
     <ShowAsAssociation>
       <Property Name="OperatingSystem" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.Donor">
     <Position X="11.25" Y="11.5" Width="2" />
@@ -397,15 +403,15 @@
     <AssociationLine Name="DefaultCampaign" Type="Givt.Domain.Entities.Campaign" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="7.25" Y="8" />
-        <Point X="7.25" Y="5.585" />
-        <Point X="8.5" Y="5.585" />
+        <Point X="7.25" Y="5.875" />
+        <Point X="8.5" Y="5.875" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Campaigns" Type="Givt.Domain.Entities.Campaign" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="7.162" Y="8" />
-        <Point X="7.162" Y="5.342" />
-        <Point X="8.5" Y="5.342" />
+        <Point X="7.162" Y="5.75" />
+        <Point X="8.5" Y="5.75" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Mediums" Type="Givt.Domain.Entities.Medium" FixedFromPoint="true" FixedToPoint="true">
@@ -469,6 +475,7 @@
     <ShowAsAssociation>
       <Property Name="Recipient" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Givt.Domain.Entities.DonationHistory">
     <Position X="16.75" Y="0.75" Width="1.75" />
