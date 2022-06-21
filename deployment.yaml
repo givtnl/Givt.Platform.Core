@@ -30,7 +30,6 @@ spec:
           - name: appsettings-volume
             mountPath: /app/appsettings.k8s.json
             subPath: appsettings.k8s.json
-        volumeMounts:
           - name: secret-db-password
             mountPath: /app/db-password
 
