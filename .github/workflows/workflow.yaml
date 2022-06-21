@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup dotnet v6
-          uses: actions/setup-dotnet@v2
-          with:
-            dotnet-version: '6.x'
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.x'
       - name: Install dependencies
         run: dotnet restore
       - name: Build
