@@ -3,9 +3,9 @@ using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class Campaign : EntityBase<Int64>, IEntity<Int64>
+public class Campaign : EntityBase, IEntity
 {
-    public Int64 OwnerId { get; set; }
+    public Guid OwnerId { get; set; }
     public Recipient Owner { get; set; }
     public string Namespace { get; set; }
     public decimal[] Amounts { get; set; }
@@ -15,10 +15,10 @@ public class Campaign : EntityBase<Int64>, IEntity<Int64>
     public DateTime? EndDate { get; set; }
     public ICollection<Timeslot> Timeslots { get; set; }
     public ICollection<CampaignTexts> Texts { get; set; }
-    public Int64 DefaultFeeId { get; set; }
+    public Guid DefaultFeeId { get; set; }
     public Fee DefaultFee { get; set; }
     public ICollection<FeeAgreement> FeeAgreements { get; set; }
-    public Int64 PayOutMethodId { get; set; }
+    public Guid PayOutMethodId { get; set; }
     public PayOutMethod PayOutMethod { get; set; }
     
     public ICollection<PayOut> PayOuts{ get; set; }

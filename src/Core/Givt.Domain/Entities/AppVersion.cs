@@ -4,7 +4,7 @@ using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class AppVersion : EntityBase<Int64>, IEntity<Int64>
+public class AppVersion : EntityBase, IEntity
 {
     public int BuildNumber { get; set; }
     public DeviceOS OperatingSystem { get; set; }

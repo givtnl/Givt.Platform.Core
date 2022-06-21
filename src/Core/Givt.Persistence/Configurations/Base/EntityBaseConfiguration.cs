@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistence.Configurations.Base
 {
-    public class EntityBaseGuidConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
-        where TEntity : EntityBase<Guid>
+    public class EntityBaseConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
+        where TEntity : EntityBase
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
