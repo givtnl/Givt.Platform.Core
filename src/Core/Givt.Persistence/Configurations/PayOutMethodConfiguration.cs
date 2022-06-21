@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistence.Configurations;
 
-public class PayOutMethodConfiguration : EntityBaseInt64Configuration<PayOutMethod>
+public class PayOutMethodConfiguration : EntityBaseConfiguration<PayOutMethod>
 {
     public override void Configure(EntityTypeBuilder<PayOutMethod> builder)
     {

@@ -3,6 +3,7 @@ using System;
 using Givt.Persistence.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Givt.Persistence.Migrations
 {
     [DbContext(typeof(GivtDbContext))]
-    partial class GivtDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220621091925_ChangeIdToUuid")]
+    partial class ChangeIdToUuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

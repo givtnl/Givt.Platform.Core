@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistence.Configurations;
 
-public class AppVersionConfiguration : EntityBaseInt64Configuration<AppVersion>
+public class AppVersionConfiguration : EntityBaseConfiguration<AppVersion>
 {
     public override void Configure(EntityTypeBuilder<AppVersion> builder)
     {

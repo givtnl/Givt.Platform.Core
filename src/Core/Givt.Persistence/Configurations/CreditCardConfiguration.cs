@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistence.Configurations;
 
-public class CreditCardConfiguration : EntityBaseInt64Configuration<CreditCard>
+public class CreditCardConfiguration : EntityBaseConfiguration<CreditCard>
 {
     public override void Configure(EntityTypeBuilder<CreditCard> builder)
     {

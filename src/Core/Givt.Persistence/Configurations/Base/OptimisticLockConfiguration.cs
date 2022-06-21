@@ -1,12 +1,11 @@
 ﻿using Givt.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Givt.Persistence.Configurations.Base
 {
-    public class OptimisticLockConfiguration<TEntityAudit> : EntityBaseInt64Configuration<TEntityAudit>
-        where TEntityAudit : EntityLockAudit<Int64, DateTime>
+    public class OptimisticLockConfiguration<TEntityAudit> : EntityBaseConfiguration<TEntityAudit>
+        where TEntityAudit : EntityLockAudit<DateTime>
     {
         public override void Configure(EntityTypeBuilder<TEntityAudit> builder)
         {

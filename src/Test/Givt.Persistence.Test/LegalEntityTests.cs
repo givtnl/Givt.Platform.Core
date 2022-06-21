@@ -33,7 +33,7 @@ namespace Givt.Persistence.Test
         public async Task LegalEntity_OptimisticLock()
         {
             // save legal entity
-            Int64 id;
+            Guid id;
             using (var context = new GivtDbContext(dbContextOptions, mapper))
             {
                 var entity = new LegalEntity

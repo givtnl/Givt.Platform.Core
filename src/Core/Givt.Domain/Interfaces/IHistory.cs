@@ -4,10 +4,7 @@ namespace Givt.Domain.Interfaces;
 
 public interface IHistory
 {
+    public Guid Id { get; set; }
     public DateTime Modified { get; set; }
     public LogReason Reason { get; set; }
-}
-public interface IHistory<Tid> : IHistory
-{
-    public Tid Id { get; set; }
 }

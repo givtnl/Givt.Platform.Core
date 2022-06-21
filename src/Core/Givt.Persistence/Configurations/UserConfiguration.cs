@@ -1,5 +1,4 @@
 ﻿using Givt.Domain.Entities;
-using Givt.Persistence.Configurations.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

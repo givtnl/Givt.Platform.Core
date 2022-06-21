@@ -2,7 +2,7 @@
 
 namespace Givt.Domain.Entities.Base;
 
-public abstract class EntityBase<TId> : IEntity<TId>
+public abstract class EntityBase : IEntity
 {
-    public TId Id { get; set; }
+    public Guid Id { get; set; }
 }

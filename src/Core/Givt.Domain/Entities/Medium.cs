@@ -3,17 +3,17 @@ using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class Medium : EntityBase<Int64>, IEntity<Int64>
+public class Medium : EntityBase, IEntity
 {
     /// <summary>
     /// Namespace + instance
     /// </summary>
     public string MediumId { get; set; }
-    public Int64 OwnerId { get; set; }
+    public Guid OwnerId { get; set; }
     public Recipient Owner { get; set; }
 
 
-    public Int64 CampaignId { get; set; }
+    public Guid CampaignId { get; set; }
     /// <summary>
     /// The Campaign this medium <b>always</b> relates to. If there is flexibility e.g. through Timeslot(s), this is not set.
     /// </summary> 

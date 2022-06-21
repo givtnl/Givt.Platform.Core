@@ -1,7 +1,7 @@
 ﻿namespace Givt.Domain.Interfaces
 {
-    public interface IEntity<TId>
+    public interface IEntity
     {
-        TId Id { get; }
+        Guid Id { get; }
     }
 }
