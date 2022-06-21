@@ -1,14 +1,15 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class FeeAgreement: EntityBase<Guid>
+public class FeeAgreement: EntityBase<Int64>, IEntity<Int64>
 {
-    public Guid CampaignId { get; set; }    
+    public Int64 CampaignId { get; set; }    
     public Campaign Campaign { get; set; }
-    public Guid RecipientId { get; set; }    
+    public Int64 RecipientId { get; set; }    
     public Recipient Recipient { get; set; }
-    public Guid FeeId { get; set; }    
+    public Int64 FeeId { get; set; }    
     public Fee Fee { get; set; }
     public int? MinVolumeCount { get; set; } // minimum volume discount start
     public string Currency { get; set; }

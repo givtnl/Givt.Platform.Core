@@ -1,8 +1,9 @@
 ﻿using Givt.Domain.Entities.Base;
+using Givt.Domain.Interfaces;
 
 namespace Givt.Domain.Entities;
 
-public class PayOut : EntityBase<Guid>
+public class PayOut : EntityBase<Int64>, IEntity<Int64>
 {
     public DateTime EndDate { get; set; }
     public DateTime ExecutedDate { get; set; }
@@ -34,7 +35,7 @@ public class PayOut : EntityBase<Guid>
 
     public string PaymentProviderId { get; set; }
 
-    public Guid CampaignId { get; set; }    
+    public Int64 CampaignId { get; set; }    
     public Campaign Campaign { get; set; }
  
 }

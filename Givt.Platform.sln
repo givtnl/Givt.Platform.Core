@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Domain", "src\Core\Givt.Domain\Givt.Domain.csproj", "{DB5D81CB-A397-4F88-9050-B9EE867EBEFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Persistance", "src\Core\Givt.Persistance\Givt.Persistance.csproj", "{A13D3C3A-39A5-4B20-BD54-5F981FC7695D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Persistence", "src\Core\Givt.Persistence\Givt.Persistence.csproj", "{A13D3C3A-39A5-4B20-BD54-5F981FC7695D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.API", "src\Core\Givt.API\Givt.API.csproj", "{BB74ABB0-92AF-4953-B10B-5B3332F24997}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Infrastructure", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{2B149C9C-79DB-4486-8C5F-58E0300C85B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Persistance.Test", "src\Test\Givt.Persistance.Test\Givt.Persistance.Test.csproj", "{F72C40AF-60A0-4BBC-BDF4-2808374CB4D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Persistence.Test", "src\Test\Givt.Persistence.Test\Givt.Persistence.Test.csproj", "{F72C40AF-60A0-4BBC-BDF4-2808374CB4D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.API.UnitTest", "src\Test\Givt.API.UnitTest\Givt.API.UnitTest.csproj", "{41F2CD2A-F1CD-4A93-930C-C812631396BF}"
 EndProject
