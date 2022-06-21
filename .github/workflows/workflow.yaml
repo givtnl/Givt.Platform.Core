@@ -67,6 +67,12 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBERNETES_GITHUB_SERVICE_ACCOUNT }}
 
+
+      - name: Update config in k8s
+        # using dryrun, we can use apply that handles creation and updates
+        run: |
+          kubectl create configmap appsettings --from-file=config/appsettings.k8s.json -n givt-platform-staging -o yaml --dry-run=client | kubectl apply -f -
+
       - name: Deploy in k8s
         uses: Azure/k8s-deploy@v3.1
         with:
