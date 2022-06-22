@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-# COPY ./src/Core/Givt.API/Givt.API.csproj ./
+# COPY ./src/Core/Givt.Core.API/Givt.Core.API.csproj ./
 
 # Copy everything else and build
 COPY ./ ./
