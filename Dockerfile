@@ -25,4 +25,4 @@ ENV ASPNETCORE_URLS http://*:5000
 
 EXPOSE 5000
 
-ENTRYPOINT ["dotnet", "Givt.API.dll"]
+ENTRYPOINT ["dotnet", "Givt.Core.API.dll"]
