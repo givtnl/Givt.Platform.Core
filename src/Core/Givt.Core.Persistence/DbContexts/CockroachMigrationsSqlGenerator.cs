@@ -8,10 +8,8 @@ namespace Givt.Core.Persistence.DbContexts
     {
         public CockroachMigrationsSqlGenerator(
             MigrationsSqlGeneratorDependencies dependencies,
-#pragma warning disable EF1001 // Internal EF Core API usage.
-            INpgsqlOptions npgsqlOptions)
-#pragma warning restore EF1001 // Internal EF Core API usage.
-            : base(dependencies, npgsqlOptions)
+            INpgsqlSingletonOptions npgsqlSingletonOptions)
+            : base(dependencies, npgsqlSingletonOptions)
         {
         }
 

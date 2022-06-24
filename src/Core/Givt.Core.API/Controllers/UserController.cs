@@ -11,7 +11,6 @@ namespace Givt.Core.API.Controllers;
 
 [ApiController]
 [ApiVersion("2.0")]
-//[Route("api/[controller]")]
 [Route("v{version:apiVersion}/[controller]")]
 public class UserController : Controller
 {
