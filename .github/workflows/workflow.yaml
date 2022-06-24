@@ -59,12 +59,23 @@ jobs:
           tags: |-
             ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.run_number }}.${{ github.run_attempt }}.${{ steps.vars.outputs.sha_short }}
+<<<<<<< HEAD
+=======
+          # This line might be an issue
+          #  ${{ endsWith(github.ref, '/main') && format('{0}/platform-api:latest', secrets.DOCKER_HUB_USERNAME )}}
+>>>>>>> main
 
       - name: Connect to k8s cluster
         uses: azure/k8s-set-context@v2
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBERNETES_GITHUB_SERVICE_ACCOUNT }}
+
+
+      - name: Update config in k8s
+        # using dryrun, we can use apply that handles creation and updates
+        run: |
+          kubectl create configmap appsettings --from-file=config/appsettings.k8s.json -n givt-platform-staging -o yaml --dry-run=client | kubectl apply -f -
 
       - name: Deploy in k8s
         uses: Azure/k8s-deploy@v3.1
@@ -73,3 +84,4 @@ jobs:
           manifests: |
             deployment.yaml
           images: "${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.run_number }}.${{ github.run_attempt }}.${{ steps.vars.outputs.sha_short }}"
+

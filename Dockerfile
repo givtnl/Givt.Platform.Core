@@ -5,7 +5,8 @@ WORKDIR /app
 # COPY ./src/Core/Givt.Core.API/Givt.Core.API.csproj ./
 
 # Copy everything else and build
-COPY ./ ./
+COPY src/ ./src/
+COPY Givt.Platform.sln ./
 
 ## Don't hardcode!
 ENV ASPNETCORE_ENVIRONMENT=Development
