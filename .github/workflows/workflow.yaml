@@ -56,11 +56,12 @@ jobs:
           # Only push image when on main (production) and pre-main (development)
           ##push: ${{ GitHub.event_name != 'pull_request' }}
           push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }}
-            ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.run_number }}.${{ github.run_attempt }}.${{ steps.vars.outputs.sha_short }}
-          # This line might be an issue
-          #  ${{ endsWith(github.ref, '/main') && format('{0}/platform-api:latest', secrets.DOCKER_HUB_USERNAME )}}
+          tags: join(
+            [
+              ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ endsWith(github.ref, '/main') && 'production' || 'development' }},
+              ${{ secrets.DOCKER_HUB_USERNAME }}/platform-api:${{ github.run_number }}.${{ github.run_attempt }}.${{ steps.vars.outputs.sha_short }},
+              ${{ endsWith(github.ref, '/main') && format('{0}/platform-api:latest', secrets.DOCKER_HUB_USERNAME )}}
+            ])
 
       - name: Connect to k8s cluster
         uses: azure/k8s-set-context@v2
