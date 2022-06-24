@@ -14,8 +14,22 @@ spec:
       labels:
         app: platform-api
     spec:
+      volumes:
+      - name: appsettings-volume
+        configMap:
+          name: appsettings
+      - name: secret-db-password
+        secret:
+          secretName: database-password
       containers:
       - name: platform-api
         image: givt/platform-api:development
         ports:
         - containerPort: 5000
+        volumeMounts:
+          - name: appsettings-volume
+            mountPath: /app/appsettings.k8s.json
+            subPath: appsettings.k8s.json
+          - name: secret-db-password
+            mountPath: /app/db-password
+
