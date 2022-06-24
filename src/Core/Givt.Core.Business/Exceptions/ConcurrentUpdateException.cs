@@ -1,4 +1,4 @@
-﻿namespace Givt.Business.Exceptions
+﻿namespace Givt.Core.Business.Exceptions
 {
     public class ConcurrentUpdateException : GivtException
     {

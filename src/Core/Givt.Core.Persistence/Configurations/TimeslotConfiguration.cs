@@ -22,7 +22,7 @@ public class TimeslotConfiguration : EntityBaseConfiguration<Timeslot>
             .HasOne(e => e.Owner)
             .WithMany(o => o.Timeslots)
             .HasForeignKey(e => e.OwnerId)
-            //.OnDelete(DeleteBehavior.Cascade)
+            .OnDelete(DeleteBehavior.Cascade)
             ;
     }
 }

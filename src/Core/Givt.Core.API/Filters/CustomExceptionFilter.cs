@@ -1,4 +1,4 @@
-﻿using Givt.Business.Exceptions;
+﻿using Givt.Core.Business.Exceptions;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

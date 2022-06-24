@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Givt.Business.Exceptions;
+namespace Givt.Core.Business.Exceptions;
 
 public class NotFoundException : GivtException
 {

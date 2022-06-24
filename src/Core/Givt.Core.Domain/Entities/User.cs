@@ -4,6 +4,7 @@ namespace Givt.Core.Domain.Entities;
 
 public class User
 {
+    public static string NormaliseEmail(string email) => email?.ToLower();
     public string Name { get; set; }
 
     private string _email;
@@ -13,7 +14,7 @@ public class User
         set
         {
             _email = value;
-            EmailNormalised = value.ToLower();
+            EmailNormalised = NormaliseEmail(value);
         } 
     }
     public string EmailNormalised { get; set; } // is key

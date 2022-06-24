@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Givt.Core.Persistence\Givt.Core.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
