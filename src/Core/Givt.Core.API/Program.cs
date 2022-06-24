@@ -35,6 +35,7 @@ namespace Givt.API
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // I think we dont need this anymore right? Bcus AddAzureAppConfig() ?
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: true)
+                .AddKeyPerFile(Path.Combine(Directory.GetCurrentDirectory(), "db-password"), optional: true)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -60,7 +61,16 @@ namespace Givt.API
             logger.Information($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
             Console.WriteLine($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
 
+            
             var connectionString = config.GetConnectionString("GivtCoreDb");
+
+            if(config["password"] != null)
+            {
+                Console.WriteLine("Replacing password with secret");
+
+                connectionString = connectionString.Replace("{{PASSWORD_HERE}}", config["password"]);
+            }            
+
             LogConnectionString(logger, connectionString);
             builder.Services.AddDbContext<CoreContext>(options => options
                 .UseNpgsql(connectionString)
