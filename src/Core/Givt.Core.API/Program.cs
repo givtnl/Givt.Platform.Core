@@ -220,7 +220,8 @@ namespace Givt.API
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // HTTPS can be handled by the gateway
+            //app.UseHttpsRedirection();
 
             var supportedCultures = new[] { "en-US", "en-GB", "nl-NL", "en-NL", "nl-BE", "en-BE", "de-DE" };
 
@@ -238,7 +239,7 @@ namespace Givt.API
             //app.UseMvc();
 
             app.Urls.Clear();
-            app.Urls.Add("https://*:5000");
+            app.Urls.Add("http://*:5000");
 
             app.Run();
         }
