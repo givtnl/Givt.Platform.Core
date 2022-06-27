@@ -4,3 +4,5 @@
 src/Core/Givt.API/appsettings.Development.json
 .vs
 **/**/out/*
+/src/Core/Givt.Core.API/appsettings.Development.json
+/src/Core/Givt.Core.API/Givt.Core.API.csproj.user
