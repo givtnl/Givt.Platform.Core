@@ -1,4 +1,4 @@
-﻿namespace Givt.API.Options
+﻿namespace Givt.Core.API.Options
 {
     public class JwtOptions
     {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog.Sinks.Http.Logger;
 using System.Security.Claims;
 
-namespace Givt.API.Filters;
+namespace Givt.Core.API.Filters;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class CustomExceptionFilter : ExceptionFilterAttribute

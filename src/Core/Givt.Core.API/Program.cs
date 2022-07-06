@@ -1,9 +1,8 @@
 using AutoMapper;
-using Givt.API.Filters;
-using Givt.API.Handlers;
-using Givt.API.MiddleWare;
-using Givt.API.Options;
+using Givt.Core.API.Filters;
+using Givt.Core.API.Handlers;
 using Givt.Core.API.Mappings;
+using Givt.Core.API.MiddleWare;
 using Givt.Core.API.Options;
 using Givt.Core.Business.CQR;
 using Givt.Core.Business.Infrastructure.Health;
@@ -158,7 +157,6 @@ namespace Givt.API
                 }));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
             builder.Services.AddApiVersioning(config =>
             {
                 config.DefaultApiVersion = new ApiVersion(2, 0);
@@ -203,6 +201,9 @@ namespace Givt.API
                     .Where(f => File.Exists(f))
                     .ToArray();
                 Array.ForEach(xmlDocs, (d) => { options.IncludeXmlComments(d); });
+
+                // Filter out `api-version` parameters globally
+                options.OperationFilter<ApiVersionFilter>();
             });
 
 
@@ -238,8 +239,6 @@ namespace Givt.API
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-
             var supportedCultures = new[] { "en-US", "en-GB", "nl-NL", "en-NL", "nl-BE", "en-BE", "de-DE" };
 
             app.UseRequestLocalization(options =>
@@ -253,7 +252,7 @@ namespace Givt.API
             //app.UseMvc();
 
             app.Urls.Clear();
-            app.Urls.Add("https://*:5000");
+            app.Urls.Add("http://*:5000");
 
             app.Run();
         }
