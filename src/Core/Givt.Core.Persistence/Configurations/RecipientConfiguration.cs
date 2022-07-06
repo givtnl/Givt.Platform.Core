@@ -1,4 +1,5 @@
 ﻿using Givt.Core.Domain.Entities;
+using Givt.Core.Persistence.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,6 +18,11 @@ public class RecipientConfiguration : IEntityTypeConfiguration<Recipient>
 
         builder.Property(x => x.LogoImageLink)
             .HasMaxLength(200);
+
+        builder.Property(x => x.PaymentMethods)
+            .HasColumnType("BIGINT UNSIGNED")
+            .HasConversion(PaymentMethodsConverter.GetConverter())
+            .Metadata.SetValueComparer(PaymentMethodsConverter.GetComparer());
 
 
         builder

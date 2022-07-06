@@ -1,5 +1,5 @@
-﻿using Givt.Core.Domain.Entities.Base;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Platform.EF.Entities;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities;
 
@@ -15,6 +15,6 @@ public class FeeAgreement: EntityBase, IEntity
     public string Currency { get; set; }
     public int? MinVolumeAmount { get; set; } // minimum amount discount start
     public int Discount { get; set; } // percentage
-    public DateTime StartDateTime { get; set; }
-    public DateTime EndDateTime { get; set; }
+    public DateTime? StartDateTime { get; set; }
+    public DateTime? EndDateTime { get; set; }
 }

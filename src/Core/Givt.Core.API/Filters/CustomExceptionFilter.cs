@@ -1,4 +1,5 @@
-﻿using Givt.Core.Business.Exceptions;
+﻿using Givt.Platform.Common.Enums;
+using Givt.Platform.Common.Exceptions;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

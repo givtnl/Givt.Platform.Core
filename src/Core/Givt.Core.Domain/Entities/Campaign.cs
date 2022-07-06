@@ -1,5 +1,5 @@
-﻿using Givt.Core.Domain.Entities.Base;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Platform.EF.Entities;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities;
 
@@ -19,6 +19,5 @@ public class Campaign : EntityBase, IEntity
     public Fee DefaultFee { get; set; }
     public ICollection<FeeAgreement> FeeAgreements { get; set; }
     public Guid PayOutMethodId { get; set; }
-    public PayOutMethod PayOutMethod { get; set; }
-        
+    public PayOutMethod PayOutMethod { get; set; }        
 }

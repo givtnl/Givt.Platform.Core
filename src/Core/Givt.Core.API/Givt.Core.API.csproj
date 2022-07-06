@@ -34,6 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
@@ -43,7 +44,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Givt.Core.Business\Givt.Core.Business.csproj" />
     <ProjectReference Include="..\Givt.Core.Domain\Givt.Core.Domain.csproj" />
-    <ProjectReference Include="..\Givt.Core.Infrastructure\Givt.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\Givt.Core.Persistence\Givt.Core.Persistence.csproj" />
   </ItemGroup>
 
@@ -60,6 +60,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Campaign\" />
+    <Folder Include="Models\Config\" />
   </ItemGroup>
 
 </Project>
