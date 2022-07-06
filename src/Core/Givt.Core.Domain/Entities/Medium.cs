@@ -1,5 +1,5 @@
-﻿using Givt.Core.Domain.Entities.Base;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Platform.EF.Entities;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities;
 
@@ -17,10 +17,12 @@ public class Medium : EntityBase, IEntity
     /// <summary>
     /// The Campaign this medium <b>always</b> relates to. If there is flexibility e.g. through Timeslot(s), this is not set.
     /// </summary> 
-    public Campaign Campaign { get; set; } // TODO: discuss if this is needed. Can always link to an infinite timeslot?
+    public Campaign Campaign { get; set; } 
 
     /// <summary>
     /// The Timeslot(s) in which this medium is valid. Through the TimeSlot the medium is linked to a Campaign.
     /// </summary>
     public ICollection<Timeslot> Timeslots { get; set; }
+
+    // If neither Campaign nor TimeSlot yields a Campaign, the Owner's DefaultCampaign is to be used.
 }

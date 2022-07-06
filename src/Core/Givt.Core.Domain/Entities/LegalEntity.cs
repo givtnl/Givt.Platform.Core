@@ -1,6 +1,6 @@
-﻿using Givt.Core.Domain.Entities.Base;
-using Givt.Core.Domain.Enums;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Core.Domain.Enums;
+using Givt.Platform.EF.Entities;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities;
 
@@ -11,11 +11,6 @@ public class LegalEntity : EntityLockAudit<DateTime>, IEntity, IAuditBasic, IOpt
     public string Preposition { get; set; } // tussenvoegsel
     public string Name { get; set; }
     public string[] Address { get; set; }
-    //public string AddressLine1 { get; set; }
-    //public string AddressLine2 { get; set; }
-    //public string AddressLine3 { get; set; }
-    //public string AddressLine4 { get; set; }
-    //public string AddressLine5 { get; set; }
     public string PostalCode { get; set; }
     public string City { get; set; }
     public string CountryId { get; set; }

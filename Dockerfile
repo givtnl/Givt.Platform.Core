@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Copy everything else and build
 COPY src/ ./src/
+COPY Givt.Platform/ ./Givt.Platform/
 COPY Givt.Platform.Core.sln ./
 
 ## Don't hardcode!
