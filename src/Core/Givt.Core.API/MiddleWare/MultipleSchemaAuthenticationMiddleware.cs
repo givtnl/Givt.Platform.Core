@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
-namespace Givt.API.MiddleWare;
+namespace Givt.Core.API.MiddleWare;
 
 public class MultipleSchemaAuthenticationMiddleware
 {

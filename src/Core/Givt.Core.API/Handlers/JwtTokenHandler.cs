@@ -3,9 +3,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Serilog.Sinks.Http.Logger;
-using Givt.API.Options;
+using Givt.Core.API.Options;
 
-namespace Givt.API.Handlers;
+namespace Givt.Core.API.Handlers;
 
 public class JwtTokenHandler
 {

@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Givt.Core.API.Controllers
 {
-    [Route("api/medium")] // compatibility with Givt Online Checkout / Point of Giving frontend
-    [Route("api/[controller]")]
+    //[ApiController]
+    //[ApiVersion("2.0")]
+    //[Route("api/medium")] // compatibility with Givt Online Checkout / Point of Giving frontend
+    //[Route("api/[controller]")]
     public class CampaignController : ControllerBase
     {
         private readonly IMapper _mapper;
