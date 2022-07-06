@@ -3,17 +3,22 @@ using Givt.API.Filters;
 using Givt.API.Handlers;
 using Givt.API.MiddleWare;
 using Givt.API.Options;
-using Givt.Core.API.Models.Config;
-using Givt.Core.Business.CQR.User.Authorisation;
-using Givt.Core.Infrastructure.Behaviors;
-using Givt.Core.Infrastructure.Loggers;
+using Givt.Core.API.Mappings;
+using Givt.Core.API.Options;
+using Givt.Core.Business.CQR;
+using Givt.Core.Business.Infrastructure.Health;
+using Givt.Core.Business.Infrastructure.Pipelines;
 using Givt.Core.Persistence.DbContexts;
+using Givt.Platform.Common.Infrastructure.Behaviors;
+using Givt.Platform.Common.Loggers;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -32,10 +37,19 @@ namespace Givt.API
 
             // Build a config object, using env vars and JSON providers.
             IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // I think we dont need this anymore right? Bcus AddAzureAppConfig() ?
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.k8s.json", optional: true, reloadOnChange: true)
-                .AddKeyPerFile(Path.Combine(Directory.GetCurrentDirectory(), "db-password"), optional: true)
+                .AddJsonFile("secrets/appsecrets.db.json", optional: true, reloadOnChange: true)
+
+                .AddJsonFile("config/appsettings.crypto.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsecrets.crypto.json", optional: true, reloadOnChange: true)
+
+                .AddJsonFile("config/appsettings.auth0.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsecrets.auth0.json", optional: true, reloadOnChange: true)
+
+                .AddJsonFile("config/appsettings.jwt.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsecrets.jwt.json", optional: true, reloadOnChange: true)
+
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -47,8 +61,8 @@ namespace Givt.API
                 .AddSingleton(sp => sp.GetRequiredService<IOptions<CryptographyConfig>>().Value);
 
             builder.Services
-                .Configure<ApiKeysConfig>(config.GetSection(ApiKeysConfig.SectionName))
-                .AddSingleton(sp => sp.GetRequiredService<IOptions<ApiKeysConfig>>().Value);
+                .Configure<Auth0Config>(config.GetSection(Auth0Config.SectionName))
+                .AddSingleton(sp => sp.GetRequiredService<IOptions<Auth0Config>>().Value);
 
             var jwtSection = config.GetSection(JwtOptions.SectionName);
             builder.Services
@@ -56,21 +70,14 @@ namespace Givt.API
                 .AddSingleton(sp => sp.GetRequiredService<IOptions<JwtOptions>>().Value);
 
             // logging
-            var logger = new LogitHttpLogger(config["LogitConfiguration:Tag"], config["LogitConfiguration:Key"]);
+            var logitOptions = new LogitHttpLoggerOptions();
+            config.GetSection(LogitHttpLoggerOptions.SectionName).Bind(logitOptions);
+            var logger = new LogitHttpLogger(logitOptions);
             builder.Services.AddSingleton<ILog, LogitHttpLogger>(x => logger);
             logger.Information($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
             Console.WriteLine($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
 
-            
             var connectionString = config.GetConnectionString("GivtCoreDb");
-
-            if(config["password"] != null)
-            {
-                Console.WriteLine("Replacing password with secret");
-
-                connectionString = connectionString.Replace("{{PASSWORD_HERE}}", config["password"]);
-            }            
-
             LogConnectionString(logger, connectionString);
             builder.Services.AddDbContext<CoreContext>(options => options
                 .UseNpgsql(connectionString)
@@ -82,46 +89,27 @@ namespace Givt.API
                 .EnableDetailedErrors()
 #endif
             );
+            builder.Services.AddHealthChecks()
+                .AddCheck<DbHealthCheck>("Database", failureStatus: HealthStatus.Unhealthy, tags: new[] { "ready" });
 
             builder.Services.AddSingleton(new MapperConfiguration(mc =>
             {
                 mc.AddProfiles(new List<Profile>
                 {
-                    //new DonationHistoryMappingProfile(),
-                    //new MediumMappingProfile(),
-                    //new OrganisationMappingProfile(),
-                    //new ReportMappingProfile(),
+                    // API
+                    new MediumMappingProfile(),
+                    new CampaignMappingProfile(),
 
-                    //new DataMediumMappingProfile(),
-                    //new DataOrganisationMappingProfile(),
-                    //new DonationReportMappingProfile(),
+                    // Business
+                    
                 });
             }).CreateMapper());
 
-            //builder.Services.AddSingleton<ISinglePaymentService, StripeIntegration>();
-            //builder.Services.Configure<StripeOptions>(Configuration.GetSection(StripeOptions.SectionName))
-            //    .AddSingleton(sp => sp.GetRequiredService<IOptions<StripeOptions>>().Value);
-            //builder.Services.AddTransient<IPdfService, GooglePdfService>();
-            //builder.Services.AddSingleton<IFileStorage, AzureFileStorage>();
-
-
-
-            //builder.Services.Configure<PostmarkOptions>(Configuration.GetSection(PostmarkOptions.SectionName))
-            //    .AddSingleton(sp => sp.GetRequiredService<IOptions<PostmarkOptions>>().Value);
-
-            //builder.Services.Configure<GoogleDocsOptions>(Configuration.GetSection(GoogleDocsOptions.SectionName))
-            //    .AddSingleton(sp => sp.GetRequiredService<IOptions<GoogleDocsOptions>>().Value);
-
-            //builder.Services.Configure<AzureBlobStorageOptions>(Configuration.GetSection(AzureBlobStorageOptions.SectionName))
-            //    .AddSingleton(sp => sp.GetRequiredService<IOptions<AzureBlobStorageOptions>>().Value);
-
             builder.Services.AddMediatR(
                 typeof(UserAuthorisationQuery).Assembly                   // Givt.Core.Business
-            //    typeof(ISinglePaymentNotification).Assembly,                // Givt.OnlineCheckout.Integrations.Interfaces
-            //    typeof(StripeIntegration).Assembly,                         // Givt.OnlineCheckout.Integrations.Stripe
-            //    typeof(PostmarkEmailService<IEmailNotification>).Assembly   // Givt.OnlineCheckout.Integrations.Postmark
             );
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CampaignTextGetPipeline<,>));
 
             builder.Services.AddTransient(typeof(JwtTokenHandler));
 
@@ -143,7 +131,7 @@ namespace Givt.API
                 .AddJwtBearer("Auth0", options =>
                 {
                     options.Authority = $"https://{config["Auth0:Domain"]}/";
-                    options.Audience = config["Auth0:Audience"]; // e.g. https://api.givtapp.net = Auth0's Api Identifier                     
+                    options.Audience = config["Auth0:Audience"]; // e.g. https://api.givtapp.net = Auth0's Api Identifier
                 });
             builder.Services.AddAuthorization(options =>
             {
@@ -157,6 +145,7 @@ namespace Givt.API
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddMvcCore(x => { x.Filters.Add<CustomExceptionFilter>(); })
                 .AddControllersAsServices()
@@ -216,12 +205,30 @@ namespace Givt.API
                 Array.ForEach(xmlDocs, (d) => { options.IncludeXmlComments(d); });
             });
 
+
             var app = builder.Build();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 //options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 options.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
+            });
+            app.UseRouting();
+            app.UseAuthentication(); // To support JWT Bearer tokens, and Auth0
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                // kubernetes health checks
+                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions()
+                {
+                    // shallow health check. Service = on?
+                    Predicate = (_) => false
+                });
+                endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions()
+                {
+                    // deep health check, ready to accept requests?
+                    Predicate = (check) => check.Tags.Contains("ready"),
+                });
             });
 
             // Configure the HTTP request pipeline.
@@ -231,17 +238,13 @@ namespace Givt.API
                 app.UseHsts();
             }
 
-            // HTTPS can be handled by the gateway
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             var supportedCultures = new[] { "en-US", "en-GB", "nl-NL", "en-NL", "nl-BE", "en-BE", "de-DE" };
 
             app.UseRequestLocalization(options =>
                 options.AddSupportedCultures(supportedCultures)
             ); // => This is for localizing the resources from the client
-
-            app.UseAuthentication(); // To support JWT Bearer tokens, and Auth0
-            app.UseAuthorization();
 
             app.UseMiddleware<MultipleSchemaAuthenticationMiddleware>();
 
@@ -250,7 +253,7 @@ namespace Givt.API
             //app.UseMvc();
 
             app.Urls.Clear();
-            app.Urls.Add("http://*:5000");
+            app.Urls.Add("https://*:5000");
 
             app.Run();
         }

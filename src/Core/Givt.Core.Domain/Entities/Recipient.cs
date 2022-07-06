@@ -1,4 +1,6 @@
-﻿namespace Givt.Core.Domain.Entities;
+﻿using Givt.Platform.Payments.Enums;
+
+namespace Givt.Core.Domain.Entities;
 
 public class Recipient 
 {
@@ -6,11 +8,11 @@ public class Recipient
     public LegalEntity Owner { get; set; }
     public string DisplayName { get; set; }
     public string LogoImageLink { get; set; }
-    public IEnumerable<FeeAgreement> FeeAgreements { get; set; }
+    public ICollection<FeeAgreement> FeeAgreements { get; set; }
+    public ICollection<PaymentMethod> PaymentMethods { get; set; }
     public Guid PrimaryPayOutMethodId { get; set; }
     public PayOutMethod PrimaryPayOutMethod { get; set; }
     public ICollection<PayOutMethod> PayOutMethods { get; set; }
-
     public List<Authorisation> Members { get; set; }
 
     public Guid DefaultCampaignId { get; set; }

@@ -19,6 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Givt.Platform\Givt.Platform.CockroachDb\Givt.Platform.CockroachDb.csproj" />
     <ProjectReference Include="..\Givt.Core.Domain\Givt.Core.Domain.csproj" />
   </ItemGroup>
 

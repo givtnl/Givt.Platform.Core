@@ -1,5 +1,5 @@
-﻿using Givt.Core.Domain.Enums;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Platform.EF.Enums;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities
 {
@@ -7,6 +7,6 @@ namespace Givt.Core.Domain.Entities
     {
         public Guid Id { get; set; }
         public DateTime Modified { get; set; }
-        public LogReason Reason { get; set; }
+        public EntityLogReason Reason { get; set; }
     }
 }

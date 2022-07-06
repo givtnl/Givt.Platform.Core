@@ -2,7 +2,9 @@ using AutoMapper;
 using Givt.Core.Domain.Entities;
 using Givt.Core.Domain.Enums;
 using Givt.Core.Persistence.DbContexts;
+using Givt.Platform.Common.Loggers;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Sinks.Http.Logger;
 
 namespace Givt.Core.Persistence.Test
 {
@@ -32,7 +34,14 @@ namespace Givt.Core.Persistence.Test
         {
             // save legal entity
             Guid id;
-            using (var context = new CoreContext(dbContextOptions, mapper))
+            // TODO: create proper mockup of ILog
+            var logConfig = new LogitHttpLoggerOptions
+            {
+                Tag = "Test",
+                Key = "Invalid"
+            };
+            ILog logger = new LogitHttpLogger(logConfig);
+            using (var context = new CoreContext(dbContextOptions, mapper, logger))
             {
                 var entity = new LegalEntity
                 {
@@ -52,8 +61,8 @@ namespace Givt.Core.Persistence.Test
                 await context.SaveChangesAsync();
                 id = entity.Id;
             }
-            using (var contextA = new CoreContext(dbContextOptions, mapper))
-            using (var contextB = new CoreContext(dbContextOptions, mapper))
+            using (var contextA = new CoreContext(dbContextOptions, mapper, logger))
+            using (var contextB = new CoreContext(dbContextOptions, mapper, logger))
             {
                 var entityA = contextA.LegalEntities
                     .Where(x => x.Id == id)

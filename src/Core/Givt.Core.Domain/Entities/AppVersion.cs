@@ -1,6 +1,6 @@
-﻿using Givt.Core.Domain.Entities.Base;
-using Givt.Core.Domain.Enums;
-using Givt.Core.Domain.Interfaces;
+﻿using Givt.Core.Domain.Enums;
+using Givt.Platform.EF.Entities;
+using Givt.Platform.EF.Interfaces;
 
 namespace Givt.Core.Domain.Entities;
 

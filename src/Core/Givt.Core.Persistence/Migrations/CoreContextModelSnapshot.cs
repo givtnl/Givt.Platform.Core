@@ -17,7 +17,7 @@ namespace Givt.Core.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -230,7 +230,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<int>("Discount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndDateTime")
+                    b.Property<DateTime?>("EndDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("FeeId")
@@ -245,7 +245,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<Guid>("RecipientId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartDateTime")
+                    b.Property<DateTime?>("StartDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -257,6 +257,27 @@ namespace Givt.Core.Persistence.Migrations
                     b.HasIndex("RecipientId");
 
                     b.ToTable("FeeAgreements");
+                });
+
+            modelBuilder.Entity("Givt.Core.Domain.Entities.GivtOffice", b =>
+                {
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("GivtPrivacyPolicy")
+                        .HasMaxLength(175)
+                        .HasColumnType("character varying(175)");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("WantKnowMore")
+                        .HasMaxLength(175)
+                        .HasColumnType("character varying(175)");
+
+                    b.HasKey("OwnerId");
+
+                    b.ToTable("GivtOffice");
                 });
 
             modelBuilder.Entity("Givt.Core.Domain.Entities.LegalEntity", b =>
@@ -430,6 +451,9 @@ namespace Givt.Core.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<ulong?>("PaymentMethods")
+                        .HasColumnType("numeric(20,0)");
+
                     b.Property<Guid>("PrimaryPayOutMethodId")
                         .HasColumnType("uuid");
 
@@ -452,7 +476,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<Guid>("CampaignId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EndDateTime")
+                    b.Property<DateTime?>("EndDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("MediumId")
@@ -461,7 +485,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartDateTime")
+                    b.Property<DateTime?>("StartDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -593,7 +617,7 @@ namespace Givt.Core.Persistence.Migrations
 
             modelBuilder.Entity("Givt.Core.Domain.Entities.Country", b =>
                 {
-                    b.HasOne("Givt.Core.Domain.Entities.LegalEntity", "GivtOffice")
+                    b.HasOne("Givt.Core.Domain.Entities.GivtOffice", "GivtOffice")
                         .WithMany()
                         .HasForeignKey("GivtOfficeId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -645,6 +669,17 @@ namespace Givt.Core.Persistence.Migrations
                     b.Navigation("Fee");
 
                     b.Navigation("Recipient");
+                });
+
+            modelBuilder.Entity("Givt.Core.Domain.Entities.GivtOffice", b =>
+                {
+                    b.HasOne("Givt.Core.Domain.Entities.LegalEntity", "Owner")
+                        .WithOne()
+                        .HasForeignKey("Givt.Core.Domain.Entities.GivtOffice", "OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Givt.Core.Domain.Entities.LegalEntity", b =>
