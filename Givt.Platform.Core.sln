@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Platform.CockroachDb",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Platform.EF", "Givt.Platform\Givt.Platform.EF\Givt.Platform.EF.csproj", "{236B140E-3C70-4372-84F6-DFD563B73958}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Givt.Platform.JWT", "Givt.Platform\Givt.Platform.JWT\Givt.Platform.JWT.csproj", "{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{236B140E-3C70-4372-84F6-DFD563B73958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{236B140E-3C70-4372-84F6-DFD563B73958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{236B140E-3C70-4372-84F6-DFD563B73958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{E911F3D2-8DA0-44A6-A375-B0D8CFCD4816} = {2597D490-A6AA-4314-962C-DA194FEFCEF0}
 		{EEBBAB7C-CDB9-4E8C-AE74-F59016559F12} = {2597D490-A6AA-4314-962C-DA194FEFCEF0}
 		{236B140E-3C70-4372-84F6-DFD563B73958} = {2597D490-A6AA-4314-962C-DA194FEFCEF0}
+		{7EBB0E17-FC58-49E9-B42A-EA5DDB533AE5} = {2597D490-A6AA-4314-962C-DA194FEFCEF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A88807F-23FE-4969-8A9E-A515390A97A0}

@@ -1,15 +1,16 @@
 using AutoMapper;
-using Givt.Core.API.Filters;
-using Givt.Core.API.Handlers;
 using Givt.Core.API.Mappings;
-using Givt.Core.API.MiddleWare;
 using Givt.Core.API.Options;
 using Givt.Core.Business.CQR;
 using Givt.Core.Business.Infrastructure.Health;
 using Givt.Core.Business.Infrastructure.Pipelines;
 using Givt.Core.Persistence.DbContexts;
+using Givt.Platform.Common.Filters;
 using Givt.Platform.Common.Infrastructure.Behaviors;
 using Givt.Platform.Common.Loggers;
+using Givt.Platform.Common.MiddleWare;
+using Givt.Platform.JWT.Handlers;
+using Givt.Platform.JWT.Options;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -144,16 +145,18 @@ namespace Givt.API
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddControllers();
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddMvcCore(x => { x.Filters.Add<CustomExceptionFilter>(); })
                 .AddControllersAsServices()
                 .AddMvcOptions(o => o.EnableEndpointRouting = false)
-                .AddCors(o => o.AddPolicy("EnableAll", builder =>
+                .AddCors(o => o.AddPolicy("EnableAll", policyBuilder =>
                 {
-                    builder.AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowAnyOrigin();
+                    policyBuilder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
                 }));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -268,6 +271,9 @@ namespace Givt.API
         private static string RemovePassword(string connectionString)
         {
             const string PASSWORD = "Password=";
+
+            if (String.IsNullOrEmpty(connectionString))
+                return connectionString;
             var p1 = connectionString.IndexOf(PASSWORD, StringComparison.InvariantCultureIgnoreCase);
             if (p1 >= 0)
             {

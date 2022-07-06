@@ -1,6 +1,6 @@
-﻿using Givt.Core.API.Auth;
-using Givt.Core.Domain.Entities;
+﻿using Givt.Core.Domain.Entities;
 using Givt.Core.Domain.Enums;
+using Givt.Platform.Common.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

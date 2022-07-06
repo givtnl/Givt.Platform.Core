@@ -1,4 +1,4 @@
-﻿using Givt.Core.Domain.Enums;
+﻿using Givt.Platform.Common.Enums;
 
 namespace Givt.Core.Business.CQR;
 
