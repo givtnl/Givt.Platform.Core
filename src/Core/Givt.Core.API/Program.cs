@@ -49,6 +49,10 @@ namespace Givt.API
                 .AddJsonFile("config/appsettings.jwt.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("secrets/appsecrets.jwt.json", optional: true, reloadOnChange: true)
 
+                // Kubernetes environment config files
+                .AddJsonFile("config/appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("config/appsecrets.json", optional: true, reloadOnChange: true)
+
                 .AddEnvironmentVariables()
                 .Build();
 
