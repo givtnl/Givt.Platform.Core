@@ -25,7 +25,6 @@ using Serilog.Sinks.Http.Logger;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 
 namespace Givt.API
 {
@@ -57,7 +56,6 @@ namespace Givt.API
                 .AddEnvironmentVariables()
                 .Build();
 
-            Console.WriteLine(JsonSerializer.Serialize(config));
             // Add services to the container.
 
             // chunks of configuration
