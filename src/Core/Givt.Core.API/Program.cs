@@ -58,7 +58,7 @@ namespace Givt.API
                 .Build();
 
             // For Toon: show configuration to verify all CI/CD pipelines have produced the proper outcome.
-            if (!builder.Environment.EnvironmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
+            if (builder.Environment.EnvironmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
                 DumpConfig(config);
 
             // Add services to the container.
@@ -280,7 +280,7 @@ namespace Givt.API
             {
                 DumpChildConfig(root, child);
             }
-            var json = JsonSerializer.Serialize(root);
+            var json = JsonSerializer.Serialize(root, options: new JsonSerializerOptions { WriteIndented = true });
             Console.WriteLine(json);
         }
 
