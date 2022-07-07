@@ -21,13 +21,16 @@ public class CampaignMappingProfile : Profile
                 options => options.MapFrom(src => src.Owner.LogoImageLink))
             .ForMember(dst => dst.Title,
                 options => options.MapFrom(
-                    (src, dest, _, context) => src.GetLocalisedText(nameof(CampaignTexts.Title), context.Items[ContextTag.Language] as string)))
+                    (src, dest, _, context) => 
+                        src.GetLocalisedText(nameof(CampaignTexts.Title), context.Items[ContextTag.Languages] as IOrderedEnumerable<string>)))
             .ForMember(dst => dst.Goal,
                 options => options.MapFrom(
-                    (src, dest, _, context) => src.GetLocalisedText(nameof(CampaignTexts.Goal), context.Items[ContextTag.Language] as string)))
+                    (src, dest, _, context) =>
+                        src.GetLocalisedText(nameof(CampaignTexts.Goal), context.Items[ContextTag.Languages] as IOrderedEnumerable<string>)))
             .ForMember(dst => dst.ThankYou,
                 options => options.MapFrom(
-                    (src, dest, _, context) => src.GetLocalisedText(nameof(CampaignTexts.ThankYou), context.Items[ContextTag.Language] as string)))
+                    (src, dest, _, context) =>
+                        src.GetLocalisedText(nameof(CampaignTexts.ThankYou), context.Items[ContextTag.Languages] as IOrderedEnumerable<string>)))
             .ForMember(dst => dst.PaymentMethods,
                 options => options.MapFrom(src => GetPaymentMethodsAsStrings(src.GetPaymentMethods())))
             .ForMember(dst => dst.Currency,

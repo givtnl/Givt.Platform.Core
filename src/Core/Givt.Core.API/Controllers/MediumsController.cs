@@ -1,4 +1,5 @@
 using AutoMapper;
+using Givt.Core.API.Mappings;
 using Givt.Core.API.Models.Medium;
 using Givt.Core.Business.CQR;
 using MediatR;
@@ -96,9 +97,11 @@ public class MediumsController : Controller
         [FromQuery] MediumTextsGetRequest request,
         CancellationToken cancellationToken)
     {
-        var query = _mapper.Map<CampaignTextGetByMediumQuery>(request);
+        var query = _mapper.Map<CampaignGetQuery>(request);
+        query.IncludeTexts = true;
         var response = await _mediator.Send(query, cancellationToken);
-        var result = _mapper.Map<MediumTextsGetResponse>(response);
+        var result = _mapper.Map<MediumTextsGetResponse>(response, 
+            opt => { opt.Items[ContextTag.Languages] = query.Languages; });
         return Ok(result);
     }
 
@@ -116,17 +119,21 @@ public class MediumsController : Controller
     [ProducesResponseType(typeof(MediumTextsGetResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCampaignInfo(
         [FromRoute] string code,
-        [FromHeader(Name = "Accept-Language")] string language,
+        [FromHeader(Name = "Accept-Language")] string language, // mainly here for Swagger documentation
         CancellationToken cancellationToken)
     {
-        var request = new MediumTextsGetRequest()
+        var request = new MediumGetRequest()
         {
             Code = code,
-            Language = language
         };
-        var query = _mapper.Map<CampaignTextGetByMediumQuery>(request);
+        var query = new CampaignGetQuery
+        {
+            IncludeTexts = true
+        };
+        _mapper.Map(request, query);
         var response = await _mediator.Send(query, cancellationToken);
-        var result = _mapper.Map<MediumTextsGetResponse>(response);
+        var result = _mapper.Map<MediumTextsGetResponse>(response,
+            opt => { opt.Items[ContextTag.Languages] = query.Languages; });
         return Ok(result);
     }
 
@@ -146,7 +153,7 @@ public class MediumsController : Controller
         {
             Code = code
         };
-        var query = _mapper.Map<CampaignGetByMediumQuery>(request);
+        var query = _mapper.Map<CampaignGetQuery>(request);
         var response = await _mediator.Send(query, cancellationToken);
         var result = _mapper.Map<MediumGetResponse>(response);
         return Ok(result);

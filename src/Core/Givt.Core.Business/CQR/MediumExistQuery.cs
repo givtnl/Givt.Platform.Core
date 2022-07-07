@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Givt.Core.Business.Models;
+using MediatR;
 
 namespace Givt.Core.Business.CQR;
 
 public class MediumExistQuery : IRequest<bool>
 {
-    public string MediumId { get; set; }
+    public MediumIdType MediumIdType { get; set; }
 }

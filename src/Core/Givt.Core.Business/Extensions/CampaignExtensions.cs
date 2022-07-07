@@ -18,8 +18,9 @@ public static class CampaignExtensions
     }
 
     // Select the best matching text on locale from the campaign, fall back to texts defined for the organisation
-    public static string GetLocalisedText(this Campaign campaign, string propertyName, string languageId)
+    public static string GetLocalisedText(this Campaign campaign, string propertyName, IOrderedEnumerable<string> locales)
     {
+        var checkedDefaultLanguage = false;
         if (campaign == null)
             return null;
         // get the property value through reflection
@@ -27,45 +28,46 @@ public static class CampaignExtensions
         if (propertyInfo == null)
             return null;
 
-        // get language from locale
-        var p = languageId.IndexOf('-');
-        var languageOnly = p > 0 ? languageId[..p] : languageId;
-
-        string result;
-
         var campaignTexts = campaign.Texts.ToList<CampaignTexts>();
-        // match on Campaign texts
-        result = GetMatchingText(campaignTexts, languageId, languageOnly, propertyInfo);
-        if (result != null) return result;
+        string result;
+        foreach (var locale in locales)
+        {
+            // get language from locale
+            var p = locale.IndexOf('-');
+            var language = p > 0 ? locale[..p] : locale;
 
-        // Look for text in lingua franca
-        if (!languageOnly.Equals("en", StringComparison.OrdinalIgnoreCase))
+            checkedDefaultLanguage |= language.Equals("en", StringComparison.OrdinalIgnoreCase);
+
+            // match on Campaign texts
+            result = GetMatchingText(campaignTexts, locale, language, propertyInfo);
+            if (result != null) return result;
+        }
+        if (!checkedDefaultLanguage)
         {
             // match on Campaign texts on default language "en" only
             result = GetMatchingText(campaignTexts, "en", propertyInfo);
             if (result != null) return result;
         }
-
-        // Still desperately seeking... match any text
+        // Still (desperately) seeking... match any text
         result = GetAnyText(campaignTexts, propertyInfo);
         if (result != null) return result;
 
         return String.Empty;
     }
 
-    private static string GetMatchingText(IList<CampaignTexts> texts, string languageId, string languageOnly, PropertyInfo propertyInfo)
+    private static string GetMatchingText(IList<CampaignTexts> texts, string locale, string language, PropertyInfo propertyInfo)
     {
         if (texts?.Count > 0)
         {
             CampaignTexts match = null;
             // exact match on language AND region 
             match = texts
-                .Where(t => t.LanguageId.Equals(languageId, StringComparison.OrdinalIgnoreCase))
+                .Where(t => t.LanguageId.Equals(locale, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault();
             if (match != null && propertyInfo.GetValue(match) is string result && !String.IsNullOrEmpty(result))
                 return result;
         }
-        return GetMatchingText(texts, languageOnly, propertyInfo);
+        return GetMatchingText(texts, language, propertyInfo);
     }
 
     private static string GetMatchingText(ICollection<CampaignTexts> texts, string language, PropertyInfo propertyInfo)

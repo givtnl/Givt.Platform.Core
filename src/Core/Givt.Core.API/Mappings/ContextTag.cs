@@ -2,5 +2,5 @@
 
 public static class ContextTag
 {
-    public const string Language = "Language";
+    public const string Languages = "Languages";
 }

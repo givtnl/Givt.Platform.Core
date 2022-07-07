@@ -1,9 +1,9 @@
 using AutoMapper;
 using Givt.Core.API.Mappings;
 using Givt.Core.API.Options;
+using Givt.Core.API.Pipelines;
 using Givt.Core.Business.CQR;
 using Givt.Core.Business.Infrastructure.Health;
-using Givt.Core.Business.Infrastructure.Pipelines;
 using Givt.Core.Persistence.DbContexts;
 using Givt.Platform.Common.Filters;
 using Givt.Platform.Common.Infrastructure.Behaviors;
@@ -26,6 +26,7 @@ using Serilog.Sinks.Http.Logger;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace Givt.API
 {
@@ -39,6 +40,9 @@ namespace Givt.API
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+
+                .AddJsonFile("config/appsettings.logit.json", optional: true, reloadOnChange: true)
+
                 .AddJsonFile("secrets/appsecrets.db.json", optional: true, reloadOnChange: true)
 
                 .AddJsonFile("config/appsettings.crypto.json", optional: true, reloadOnChange: true)
@@ -52,6 +56,10 @@ namespace Givt.API
 
                 .AddEnvironmentVariables()
                 .Build();
+
+            // For Toon: show configuration to verify all CI/CD pipelines have produced the proper outcome.
+            if (!builder.Environment.EnvironmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
+                DumpConfig(config);
 
             // Add services to the container.
 
@@ -69,10 +77,12 @@ namespace Givt.API
                 .Configure<JwtOptions>(jwtSection)
                 .AddSingleton(sp => sp.GetRequiredService<IOptions<JwtOptions>>().Value);
 
-            // logging
-            var logitOptions = new LogitHttpLoggerOptions();
-            config.GetSection(LogitHttpLoggerOptions.SectionName).Bind(logitOptions);
-            var logger = new LogitHttpLogger(logitOptions);
+            // logging            
+            var logger = new LogitHttpLogger(
+                config
+                    .GetSection(LogitHttpLoggerOptions.SectionName)
+                    .Get<LogitHttpLoggerOptions>()
+            );
             builder.Services.AddSingleton<ILog, LogitHttpLogger>(x => logger);
             logger.Information($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
             Console.WriteLine($"Givt.Core.API started on {builder.Environment.EnvironmentName}");
@@ -109,13 +119,14 @@ namespace Givt.API
                 typeof(UserAuthorisationQuery).Assembly                   // Givt.Core.Business
             );
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CampaignTextGetPipeline<,>));
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CampaignGetPipeline<,>));
 
             builder.Services.AddTransient(typeof(JwtTokenHandler));
 
             var jwtOptions = jwtSection.Get<JwtOptions>();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.IssuerSigningKey));
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -130,8 +141,10 @@ namespace Givt.API
                 })
                 .AddJwtBearer("Auth0", options =>
                 {
-                    options.Authority = $"https://{config["Auth0:Domain"]}/";
-                    options.Audience = config["Auth0:Audience"]; // e.g. https://api.givtapp.net = Auth0's Api Identifier
+                    var auth0Config = config.GetSection(Auth0Config.SectionName).Get<Auth0Config>();
+
+                    options.Authority = $"https://{auth0Config.Domain}/";
+                    options.Audience = auth0Config.Audience; // e.g. https://api.givtapp.net = Auth0's Api Identifier
                 });
             builder.Services.AddAuthorization(options =>
             {
@@ -258,6 +271,31 @@ namespace Givt.API
             app.Urls.Add("http://*:5000");
 
             app.Run();
+        }
+
+        private static void DumpConfig(IConfiguration config)
+        {
+            var root = new Dictionary<string, object>();
+            foreach (var child in config.GetChildren())
+            {
+                DumpChildConfig(root, child);
+            }
+            var json = JsonSerializer.Serialize(root);
+            Console.WriteLine(json);
+        }
+
+        private static void DumpChildConfig(Dictionary<string, object> parent, IConfigurationSection section)
+        {
+            var children = section.GetChildren();
+            if (children.Any())
+            {
+                var values = new Dictionary<string, object>();
+                foreach (var child in section.GetChildren())
+                    DumpChildConfig(values, child);
+                parent.Add(section.Key, values);
+            }
+            else
+                parent.Add(section.Key, section.Value);
         }
 
         private static void LogConnectionString(LogitHttpLogger logger, string connectionString)

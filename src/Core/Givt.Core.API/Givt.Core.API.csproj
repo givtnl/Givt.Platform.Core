@@ -22,13 +22,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Config\**" />
-    <Content Remove="Models\Config\**" />
-    <EmbeddedResource Remove="Models\Config\**" />
-    <None Remove="Models\Config\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.0.3" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />

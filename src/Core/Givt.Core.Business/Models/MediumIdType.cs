@@ -37,7 +37,14 @@ public struct MediumIdType : IComparable<MediumIdType>
         {
             byte[] data = Convert.FromBase64String(s);
             string decodedString = Encoding.UTF8.GetString(data);
-            return new MediumIdType(decodedString);
+            try
+            {
+                return new MediumIdType(decodedString);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 
