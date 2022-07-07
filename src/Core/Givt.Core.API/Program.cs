@@ -25,6 +25,7 @@ using Serilog.Sinks.Http.Logger;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Givt.API
 {
