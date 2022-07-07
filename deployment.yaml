@@ -34,9 +34,9 @@ spec:
         - containerPort: 5000
         volumeMounts:
           - name: appsettings-volume
-            mountPath: /config/appsettings.json
+            mountPath: /app/config/appsettings.json
             subPath: appsettings.json
           - name: secrets-volume
-            mountPath: /config/appsecrets.json
+            mountPath: /app/config/appsecrets.json
             subPath: appsecrets.json
 
