@@ -39,4 +39,9 @@ spec:
           - name: secrets-volume
             mountPath: /app/config/appsecrets.json
             subPath: appsecrets.json
+        livenessProbe: 
+          httpGet: 
+            path: /health/live
+            port: 5000
+          initialDelaySeconds: 2 #Default 0 
 
