@@ -5,10 +5,16 @@ metadata:
   labels:
     app: platform-api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: platform-api
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -17,10 +23,10 @@ spec:
       volumes:
       - name: appsettings-volume
         configMap:
-          name: appsettings
-      - name: secret-db-password
+          name: appsettings.json
+      - name: secrets-volume
         secret:
-          secretName: database-password
+          secretName: appsecrets.json
       containers:
       - name: platform-api
         image: givt/platform-api:development
@@ -28,8 +34,14 @@ spec:
         - containerPort: 5000
         volumeMounts:
           - name: appsettings-volume
-            mountPath: /app/appsettings.k8s.json
-            subPath: appsettings.k8s.json
-          - name: secret-db-password
-            mountPath: /app/db-password
+            mountPath: /app/config/appsettings.json
+            subPath: appsettings.json
+          - name: secrets-volume
+            mountPath: /app/config/appsecrets.json
+            subPath: appsecrets.json
+        livenessProbe: 
+          httpGet: 
+            path: /health/live
+            port: 5000
+          initialDelaySeconds: 2 #Default 0 
 
