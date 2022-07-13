@@ -21,6 +21,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 using Serilog.Sinks.Http.Logger;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
@@ -212,6 +213,7 @@ namespace Givt.API
 
 
             var app = builder.Build();
+            app.UseMetricServer();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
