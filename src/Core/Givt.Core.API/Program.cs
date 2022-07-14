@@ -214,6 +214,7 @@ namespace Givt.API
 
             var app = builder.Build();
             app.UseMetricServer();
+            app.UsePrometheusRequestMiddleware();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
