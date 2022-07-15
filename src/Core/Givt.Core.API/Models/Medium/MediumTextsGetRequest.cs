@@ -9,6 +9,6 @@ public class MediumTextsGetRequest
     [Description("Medium ID or Code")]
     public string Code { get; set; }
 
-    [Description("Language/Region for texts. If not set defaults to 'en'")]
+    [Description("Language/Culture for texts. If not set defaults to 'en'")]
     public string Language { get; set; }
 }

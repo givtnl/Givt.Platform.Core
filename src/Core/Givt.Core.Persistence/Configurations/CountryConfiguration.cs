@@ -22,10 +22,7 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
 
         builder
             .HasOne(e => e.GivtOffice)
-            .WithMany()
-            .HasForeignKey(e => e.GivtOfficeId)
-            .IsRequired(true)
-            .OnDelete(DeleteBehavior.NoAction);
+            .WithMany();
 
         builder.Property(x => x.PaymentMethods)
             .HasColumnType("BIGINT UNSIGNED")

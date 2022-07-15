@@ -1,4 +1,4 @@
-﻿using Givt.Platform.Payments.Enums;
+﻿using Givt.Platform.Common.Enums;
 
 namespace Givt.Core.Domain.Entities;
 
@@ -10,12 +10,12 @@ public class Recipient
     public string LogoImageLink { get; set; }
     public ICollection<FeeAgreement> FeeAgreements { get; set; }
     public ICollection<PaymentMethod> PaymentMethods { get; set; }
-    public Guid PrimaryPayOutMethodId { get; set; }
+    public Guid? PrimaryPayOutMethodId { get; set; }
     public PayOutMethod PrimaryPayOutMethod { get; set; }
     public ICollection<PayOutMethod> PayOutMethods { get; set; }
     public List<Authorisation> Members { get; set; }
 
-    public Guid DefaultCampaignId { get; set; }
+    public Guid? DefaultCampaignId { get; set; }
     /// <summary>
     /// The default campaign to allocate donations to, when the user has not selected a specific one
     /// </summary>

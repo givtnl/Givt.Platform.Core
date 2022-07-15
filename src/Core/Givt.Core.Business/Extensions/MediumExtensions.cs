@@ -28,7 +28,7 @@ public static class MediumExtensions
 
         // return the Default Campaign of the owner of the medium
         if (medium.Owner != null)
-            campaignId = medium.Owner.DefaultCampaignId;
+            campaignId = medium.Owner.DefaultCampaignId ?? Guid.Empty;
 
         return campaignId;
     }

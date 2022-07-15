@@ -26,14 +26,14 @@ public class CampaignConfiguration : EntityBaseConfiguration<Campaign>
             .HasOne(e => e.DefaultFee)
             .WithMany()
             .HasForeignKey(e => e.DefaultFeeId)
-            .IsRequired(true)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(e => e.PayOutMethod)
             .WithMany()
             .HasForeignKey(e => e.PayOutMethodId)
-            .IsRequired(true)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
     }

@@ -44,6 +44,11 @@ public class RecipientConfiguration : IEntityTypeConfiguration<Recipient>
             .HasForeignKey(c => c.OwnerId);
 
         builder
+            .HasOne(r => r.DefaultCampaign)
+            .WithOne()
+            .IsRequired(false);
+
+        builder
             .HasOne(e => e.PrimaryPayOutMethod)
             .WithMany()
             .IsRequired(false)

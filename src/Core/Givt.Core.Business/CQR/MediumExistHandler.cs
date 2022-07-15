@@ -16,6 +16,7 @@ public class MediumExistHandler : IRequestHandler<MediumExistQuery, bool>
     public async Task<bool> Handle(MediumExistQuery request, CancellationToken cancellationToken)
     {
         return await _context.Mediums
-            .AnyAsync(x => x.MediumId == request.MediumIdType, cancellationToken);
+            .Where(x => x.MediumId == (string)request.MediumIdType || x.Id == request.MediumId)
+            .AnyAsync(cancellationToken);
     }
 }

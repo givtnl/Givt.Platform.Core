@@ -9,7 +9,8 @@ public class CampaignGetQuery : IRequest<Campaign>
     public Guid CampaignId;
     public MediumIdType MediumIdType;
     public Guid MediumId;
-    public ICollection<string> Languages;
     public bool IncludeTexts;
     public bool IncludeFees;
+    public bool IncludePaymentProviders;
+    public bool IncludeGivtOffice;
 }

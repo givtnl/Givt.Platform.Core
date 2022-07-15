@@ -2,6 +2,7 @@ using AutoMapper;
 using Givt.Core.API.Mappings;
 using Givt.Core.API.Models.Medium;
 using Givt.Core.Business.CQR;
+using Givt.Platform.Common.Utils;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,9 +28,9 @@ public class MediumsController : Controller
     /// <param name="request">Request json</param>
     /// <param name="cancellationToken"></param>
     /// <returns>Exists</returns>
-    /// <response code="200">found</response>
-    /// <response code="400">malformed data</response>
-    /// <response code="404">not found</response>
+    /// <response code="200">Found</response>
+    /// <response code="400">Bad Request / Malformed Data</response>
+    /// <response code="404">Not Found</response>
     [HttpHead("/api/medium")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK, "application/json")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,20 +47,21 @@ public class MediumsController : Controller
                 return Ok();
             return NotFound();
         }
-        catch
+        catch (AutoMapperMappingException)
         {
             return BadRequest();
         }
     }
+
     /// <summary>
     /// Check whether a medium exists in the database
     /// </summary>
     /// <param name="code">Medium ID or code</param>
     /// <param name="cancellationToken"></param>
     /// <returns>Exists</returns>
-    /// <response code="200">found</response>
-    /// <response code="400">malformed data</response>
-    /// <response code="404">not found</response>
+    /// <response code="200">Found</response>
+    /// <response code="400">Bad Request / Malformed Data</response>
+    /// <response code="404">Not Found</response>
     [HttpHead("{code}")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK, "application/json")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,11 +79,12 @@ public class MediumsController : Controller
                 return Ok();
             return NotFound();
         }
-        catch
+        catch (AutoMapperMappingException)
         {
             return BadRequest();
         }
     }
+
     /// <summary>
     /// Get information and texts for a Campaign, based on a Medium ID or code (backwards compatibility)
     /// </summary>
@@ -97,11 +100,14 @@ public class MediumsController : Controller
         [FromQuery] MediumTextsGetRequest request,
         CancellationToken cancellationToken)
     {
-        var query = _mapper.Map<CampaignGetQuery>(request);
-        query.IncludeTexts = true;
+        var query = new CampaignGetQuery
+        {
+            IncludeTexts = true,
+        };
+        _mapper.Map(request, query);
         var response = await _mediator.Send(query, cancellationToken);
-        var result = _mapper.Map<MediumTextsGetResponse>(response, 
-            opt => { opt.Items[ContextTag.Languages] = query.Languages; });
+        var languages = LanguageUtils.GetLanguages(Request.Headers.AcceptLanguage, request.Language);
+        var result = _mapper.Map<MediumTextsGetResponse>(response, opt => { opt.Items[ContextTag.Languages] = languages; });
         return Ok(result);
     }
 
@@ -109,7 +115,7 @@ public class MediumsController : Controller
     /// Get information and texts for a Campaign, based on a Medium ID or code
     /// </summary>
     /// <param name="code">Medium ID or code</param>
-    /// <param name="language">Optional Accept-Language header from a browser client, or a language code or culture ID. This value selects the best matching texts for a Campaign</param>
+    /// <param name="languages">Optional Accept-Language header from a browser client, or a language code or culture ID. This value selects the best matching texts for a Campaign</param>
     /// <param name="cancellationToken"></param>
     /// <returns>Information on the medium</returns>
     /// <response code="200">information on the medium</response>
@@ -119,10 +125,10 @@ public class MediumsController : Controller
     [ProducesResponseType(typeof(MediumTextsGetResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCampaignInfo(
         [FromRoute] string code,
-        [FromHeader(Name = "Accept-Language")] string language, // mainly here for Swagger documentation
+        [FromHeader(Name = "Accept-Language")] string languages,
         CancellationToken cancellationToken)
     {
-        var request = new MediumGetRequest()
+        var request = new CampaignGetRequest()
         {
             Code = code,
         };
@@ -132,13 +138,13 @@ public class MediumsController : Controller
         };
         _mapper.Map(request, query);
         var response = await _mediator.Send(query, cancellationToken);
-        var result = _mapper.Map<MediumTextsGetResponse>(response,
-            opt => { opt.Items[ContextTag.Languages] = query.Languages; });
+        var languagesList = LanguageUtils.GetLanguages(languages, null);
+        var result = _mapper.Map<MediumTextsGetResponse>(response, opt => { opt.Items[ContextTag.Languages] = languagesList; });
         return Ok(result);
     }
 
     /// <summary>
-    /// Get relational data for a Campaign, based on a Medium ID or code
+    /// Get payment data for a Campaign, based on a Medium ID or code
     /// </summary>
     /// <param name="code">Medium ID or code</param>
     /// <param name="cancellationToken"></param>
@@ -149,11 +155,15 @@ public class MediumsController : Controller
         [FromRoute] string code,
         CancellationToken cancellationToken)
     {
-        var request = new MediumGetRequest()
+        var request = new CampaignGetRequest()
         {
             Code = code
         };
-        var query = _mapper.Map<CampaignGetQuery>(request);
+        var query = new CampaignGetQuery
+        {
+            IncludeFees = true
+        };
+        _mapper.Map(request, query);
         var response = await _mediator.Send(query, cancellationToken);
         var result = _mapper.Map<MediumGetResponse>(response);
         return Ok(result);

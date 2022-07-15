@@ -31,19 +31,19 @@ public struct MediumIdType : IComparable<MediumIdType>
     {
         try
         {
-            return new MediumIdType(s);            
+            return new MediumIdType(s);
         }
         catch (InvalidMediumException)
         {
-            byte[] data = Convert.FromBase64String(s);
-            string decodedString = Encoding.UTF8.GetString(data);
             try
             {
+                byte[] data = Convert.FromBase64String(s);
+                string decodedString = Encoding.UTF8.GetString(data);
                 return new MediumIdType(decodedString);
             }
             catch
             {
-                return null;
+                return new MediumIdType("00000000000000000000.000000000000");
             }
         }
     }
@@ -55,7 +55,7 @@ public struct MediumIdType : IComparable<MediumIdType>
     private static readonly CompiledExpression<MediumIdType, string> InstanceExpression =
         DefaultTranslationOf<MediumIdType>.Property(m => m.Instance)
         .Is(m => ((string)m).Length > 20 ? ((string)m).Substring(21, 12) : null);
-    
+
     public bool Equals(MediumIdType other)
     {
         return _value == other._value;
@@ -74,7 +74,7 @@ public struct MediumIdType : IComparable<MediumIdType>
     public static bool operator ==(MediumIdType a, MediumIdType b)
     {
         return a.Equals(b);
-    } 
+    }
     public static bool operator !=(MediumIdType a, MediumIdType b)
     {
         return !(a == b);

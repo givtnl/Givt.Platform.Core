@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Givt.Core.API.Models.Medium;
+namespace Givt.Core.API.Models.Campaign;
 
 public class CampaignGetRequest
 {

@@ -2,7 +2,7 @@
 using Givt.Core.API.Models.Medium;
 using Givt.Core.Business.Extensions;
 using Givt.Core.Domain.Entities;
-using Givt.Platform.Payments.Enums;
+using Givt.Platform.Common.Enums;
 
 namespace Givt.Core.API.Mappings;
 
@@ -10,18 +10,19 @@ public class CampaignMappingProfile : Profile
 {
     public CampaignMappingProfile()
     {
+        // Business -> API
         CreateMap<Campaign, MediumTextsGetResponse>()
             .ForMember(dst => dst.OrganisationName,
                 options => options.MapFrom(src => src.Owner.Owner.Name))
             .ForMember(dst => dst.Language,
                 options => options.MapFrom(src => src.Owner.Owner))
             .ForMember(dst => dst.Country,
-                options => options.MapFrom(src => src.Owner.Owner.CountryId ))
+                options => options.MapFrom(src => src.Owner.Owner.CountryId))
             .ForMember(dst => dst.OrganisationLogoLink,
                 options => options.MapFrom(src => src.Owner.LogoImageLink))
             .ForMember(dst => dst.Title,
                 options => options.MapFrom(
-                    (src, dest, _, context) => 
+                    (src, dest, _, context) =>
                         src.GetLocalisedText(nameof(CampaignTexts.Title), context.Items[ContextTag.Languages] as IOrderedEnumerable<string>)))
             .ForMember(dst => dst.Goal,
                 options => options.MapFrom(

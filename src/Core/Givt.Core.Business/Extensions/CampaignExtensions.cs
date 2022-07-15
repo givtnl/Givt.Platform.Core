@@ -1,5 +1,5 @@
 ﻿using Givt.Core.Domain.Entities;
-using Givt.Platform.Payments.Enums;
+using Givt.Platform.Common.Enums;
 using System.Reflection;
 
 namespace Givt.Core.Business.Extensions;
@@ -30,17 +30,20 @@ public static class CampaignExtensions
 
         var campaignTexts = campaign.Texts.ToList<CampaignTexts>();
         string result;
-        foreach (var locale in locales)
+        if (locales?.Any() == true)
         {
-            // get language from locale
-            var p = locale.IndexOf('-');
-            var language = p > 0 ? locale[..p] : locale;
+            foreach (var locale in locales)
+            {
+                // get language from locale
+                var p = locale.IndexOf('-');
+                var language = p > 0 ? locale[..p] : locale;
 
-            checkedDefaultLanguage |= language.Equals("en", StringComparison.OrdinalIgnoreCase);
+                checkedDefaultLanguage |= language.Equals("en", StringComparison.OrdinalIgnoreCase);
 
-            // match on Campaign texts
-            result = GetMatchingText(campaignTexts, locale, language, propertyInfo);
-            if (result != null) return result;
+                // match on Campaign texts
+                result = GetMatchingText(campaignTexts, locale, language, propertyInfo);
+                if (result != null) return result;
+            }
         }
         if (!checkedDefaultLanguage)
         {

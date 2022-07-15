@@ -83,8 +83,8 @@ namespace Givt.Core.Persistence.Migrations
                     Amounts = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DefaultFeeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PayOutMethodId = table.Column<Guid>(type: "uuid", nullable: false)
+                    DefaultFeeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PayOutMethodId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,7 +124,7 @@ namespace Givt.Core.Persistence.Migrations
                 {
                     Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
                     Currency = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: true),
-                    GivtOfficeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GivtOfficeId = table.Column<Guid>(type: "uuid", nullable: true),
                     PaymentMethods = table.Column<ulong>(type: "numeric(20,0)", nullable: true)
                 },
                 constraints: table =>
@@ -304,7 +304,7 @@ namespace Givt.Core.Persistence.Migrations
                     DisplayName = table.Column<string>(type: "character varying(175)", maxLength: 175, nullable: true),
                     LogoImageLink = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     PaymentMethods = table.Column<ulong>(type: "numeric(20,0)", nullable: true),
-                    PrimaryPayOutMethodId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PrimaryPayOutMethodId = table.Column<Guid>(type: "uuid", nullable: true),
                     DefaultCampaignId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -314,8 +314,7 @@ namespace Givt.Core.Persistence.Migrations
                         name: "FK_Recipients_Campaigns_DefaultCampaignId",
                         column: x => x.DefaultCampaignId,
                         principalTable: "Campaigns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Recipients_LegalEntities_OwnerId",
                         column: x => x.OwnerId,
@@ -447,7 +446,8 @@ namespace Givt.Core.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Recipients_DefaultCampaignId",
                 table: "Recipients",
-                column: "DefaultCampaignId");
+                column: "DefaultCampaignId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipients_PrimaryPayOutMethodId",

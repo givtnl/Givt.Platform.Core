@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Givt.Core.Persistence.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20220706122307_InitialCreate")]
+    [Migration("20220714140437_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,7 @@ namespace Givt.Core.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("DefaultFeeId")
+                    b.Property<Guid?>("DefaultFeeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("EndDate")
@@ -100,7 +100,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("PayOutMethodId")
+                    b.Property<Guid?>("PayOutMethodId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("StartDate")
@@ -153,7 +153,7 @@ namespace Givt.Core.Persistence.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
-                    b.Property<Guid>("GivtOfficeId")
+                    b.Property<Guid?>("GivtOfficeId")
                         .HasColumnType("uuid");
 
                     b.Property<ulong?>("PaymentMethods")
@@ -456,12 +456,13 @@ namespace Givt.Core.Persistence.Migrations
                     b.Property<ulong?>("PaymentMethods")
                         .HasColumnType("numeric(20,0)");
 
-                    b.Property<Guid>("PrimaryPayOutMethodId")
+                    b.Property<Guid?>("PrimaryPayOutMethodId")
                         .HasColumnType("uuid");
 
                     b.HasKey("OwnerId");
 
-                    b.HasIndex("DefaultCampaignId");
+                    b.HasIndex("DefaultCampaignId")
+                        .IsUnique();
 
                     b.HasIndex("PrimaryPayOutMethodId");
 
@@ -584,8 +585,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.HasOne("Givt.Core.Domain.Entities.Fee", "DefaultFee")
                         .WithMany()
                         .HasForeignKey("DefaultFeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Givt.Core.Domain.Entities.Recipient", "Owner")
                         .WithMany("Campaigns")
@@ -596,8 +596,7 @@ namespace Givt.Core.Persistence.Migrations
                     b.HasOne("Givt.Core.Domain.Entities.PayOutMethod", "PayOutMethod")
                         .WithMany()
                         .HasForeignKey("PayOutMethodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("DefaultFee");
 
@@ -621,9 +620,7 @@ namespace Givt.Core.Persistence.Migrations
                 {
                     b.HasOne("Givt.Core.Domain.Entities.GivtOffice", "GivtOffice")
                         .WithMany()
-                        .HasForeignKey("GivtOfficeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("GivtOfficeId");
 
                     b.Navigation("GivtOffice");
                 });
@@ -737,10 +734,8 @@ namespace Givt.Core.Persistence.Migrations
             modelBuilder.Entity("Givt.Core.Domain.Entities.Recipient", b =>
                 {
                     b.HasOne("Givt.Core.Domain.Entities.Campaign", "DefaultCampaign")
-                        .WithMany()
-                        .HasForeignKey("DefaultCampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne()
+                        .HasForeignKey("Givt.Core.Domain.Entities.Recipient", "DefaultCampaignId");
 
                     b.HasOne("Givt.Core.Domain.Entities.LegalEntity", "Owner")
                         .WithOne()

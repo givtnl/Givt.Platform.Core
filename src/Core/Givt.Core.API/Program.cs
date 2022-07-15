@@ -1,7 +1,6 @@
 using AutoMapper;
 using Givt.Core.API.Mappings;
 using Givt.Core.API.Options;
-using Givt.Core.API.Pipelines;
 using Givt.Core.Business.CQR;
 using Givt.Core.Business.Infrastructure.Health;
 using Givt.Core.Persistence.DbContexts;
@@ -42,6 +41,7 @@ namespace Givt.API
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
 
                 .AddJsonFile("config/appsettings.logit.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsecrets.logit.json", optional: true, reloadOnChange: true)
 
                 .AddJsonFile("secrets/appsecrets.db.json", optional: true, reloadOnChange: true)
 
@@ -58,8 +58,8 @@ namespace Givt.API
                 .Build();
 
             // For Toon: show configuration to verify all CI/CD pipelines have produced the proper outcome.
-            if (builder.Environment.EnvironmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
-                DumpConfig(config);
+            //if (builder.Environment.EnvironmentName.Equals("Development", StringComparison.OrdinalIgnoreCase))
+            //    DumpConfig(config);
 
             // Add services to the container.
 
@@ -119,7 +119,7 @@ namespace Givt.API
                 typeof(UserAuthorisationQuery).Assembly                   // Givt.Core.Business
             );
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CampaignGetPipeline<,>));
+            //builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CampaignGetPipeline<,>));
 
             builder.Services.AddTransient(typeof(JwtTokenHandler));
 

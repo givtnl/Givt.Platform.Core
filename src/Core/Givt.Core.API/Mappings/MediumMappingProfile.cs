@@ -12,23 +12,33 @@ public class MediumMappingProfile : Profile
         // API -> Business
         CreateMap<MediumCheckRequest, MediumExistQuery>()
             .ForMember(dst => dst.MediumIdType,
-                options => options.MapFrom(src => MediumIdType.FromString(src.Code)));
+                options => options.MapFrom(src => MediumIdType.FromString(src.Code)))
+            .ForMember(dst => dst.MediumId,
+                options => options.MapFrom(src => GuidTryParse(src.Code)))
+            ;
 
-        CreateMap<MediumGetRequest, CampaignGetQuery>()
+        CreateMap<CampaignGetRequest, CampaignGetQuery>()
             .ForMember(dst => dst.MediumIdType,
                 options => options.MapFrom(src => MediumIdType.FromString(src.Code)))
             .ForMember(dst => dst.MediumId,
-                options => options.MapFrom((src, dst) => Guid.TryParse(src.Code, out dst.MediumId)))
+                options => options.MapFrom(src => GuidTryParse(src.Code)))
             ;
 
         CreateMap<MediumTextsGetRequest, CampaignGetQuery>()
             .ForMember(dst => dst.MediumIdType,
                 options => options.MapFrom(src => MediumIdType.FromString(src.Code)))
             .ForMember(dst => dst.MediumId,
-                options => options.MapFrom((src, dst) => Guid.TryParse(src.Code, out dst.MediumId)))
+                options => options.MapFrom(src => GuidTryParse(src.Code)))
             ;
 
         // Business -> API
 
+    }
+
+    private static Guid GuidTryParse(string s)
+    {
+        var result = Guid.Empty;
+        Guid.TryParse(s, out result);
+        return result;
     }
 }

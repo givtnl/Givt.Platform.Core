@@ -15,9 +15,9 @@ public class Campaign : EntityBase, IEntity
     public DateTime? EndDate { get; set; }
     public ICollection<Timeslot> Timeslots { get; set; }
     public ICollection<CampaignTexts> Texts { get; set; }
-    public Guid DefaultFeeId { get; set; }
+    public Guid? DefaultFeeId { get; set; }
     public Fee DefaultFee { get; set; }
     public ICollection<FeeAgreement> FeeAgreements { get; set; }
-    public Guid PayOutMethodId { get; set; }
+    public Guid? PayOutMethodId { get; set; }
     public PayOutMethod PayOutMethod { get; set; }        
 }
